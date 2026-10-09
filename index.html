@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taskora — Verified Jobs & Business Marketplace</title>
+<style>
+:root{
+  --navy:#0A2540;--navy-2:#123A5E;--navy-3:#1B4E7A;
+  --teal:#00C48C;--teal-d:#00A375;--teal-l:#E6FAF4;
+  --gold:#FFB020;--gold-d:#E09612;--gold-l:#FFF6E5;
+  --red:#E63946;--red-l:#FEECEE;
+  --bg:#F4F7FB;--surface:#FFFFFF;--surface-2:#FAFCFE;
+  --line:#E3EAF3;--line-2:#D3DEEB;--text:#0A2540;
+  --muted:#64748B;--muted-2:#94A3B8;
+  --danger:#E5484D;--danger-l:#FEECEC;--warn:#F59E0B;--warn-l:#FFF7E6;
+  --info:#3B82F6;--info-l:#EAF2FE;--ok:#12A150;--ok-l:#E8F8EF;
+  --purple:#7C5CFF;--purple-l:#F1EDFF;
+  --r:14px;--r-sm:10px;--r-lg:20px;
+  --sh:0 1px 2px rgba(10,37,64,.06),0 8px 24px -14px rgba(10,37,64,.20);
+  --sh-lg:0 24px 60px -24px rgba(10,37,64,.35);
+  --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+::selection{background:var(--teal);color:#fff}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--line-2);border-radius:99px;border:2px solid var(--bg)}
+
+.shell{display:flex;min-height:100vh}
+.sidebar{width:258px;flex-shrink:0;background:var(--navy);color:#fff;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.content{padding:26px 30px 60px;max-width:1400px;width:100%;margin:0 auto}
+
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:-.4px}
+.brand-mark{width:38px;height:38px;border-radius:11px;flex-shrink:0;background:linear-gradient(135deg,var(--teal),#00E0A0 55%,#0FA9FF);display:grid;place-items:center;color:#04231A;font-weight:900;font-size:17px;box-shadow:0 6px 18px -6px rgba(0,196,140,.7)}
+.brand-mark svg{width:21px;height:21px}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text b{font-size:16.5px;letter-spacing:-.3px}
+.brand-text span{font-size:9.5px;letter-spacing:2.2px;text-transform:uppercase;opacity:.6;font-weight:700}
+
+.side-head{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+.side-user{margin:14px 12px;padding:12px;border-radius:var(--r);background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;gap:10px;align-items:center}
+.avatar{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;font-weight:800;font-size:14px;background:linear-gradient(135deg,var(--teal),#0FA9FF);color:#04231A}
+.avatar.sm{width:30px;height:30px;border-radius:9px;font-size:11.5px}
+.side-user .meta{min-width:0}
+.side-user .meta b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.side-user .meta span{font-size:11px;opacity:.6;text-transform:capitalize}
+.nav{padding:8px 12px;flex:1}
+.nav-label{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;opacity:.42;font-weight:800;padding:16px 10px 7px}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--r-sm);font-size:13.8px;font-weight:600;opacity:.75;transition:.15s;width:100%;text-align:left;margin-bottom:2px}
+.nav-item:hover{background:rgba(255,255,255,.08);opacity:1}
+.nav-item.active{background:linear-gradient(90deg,rgba(0,196,140,.24),rgba(0,196,140,.06));opacity:1;box-shadow:inset 3px 0 0 var(--teal)}
+.nav-badge{margin-left:auto;background:var(--teal);color:#04231A;font-size:10.5px;font-weight:800;padding:2px 7px;border-radius:99px;min-width:20px;text-align:center}
+.nav-badge.gold{background:var(--gold);color:#3A2600}
+.side-foot{padding:14px 12px 18px;border-top:1px solid rgba(255,255,255,.08)}
+.credit-chip{display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:var(--r-sm);background:rgba(255,176,32,.14);border:1px solid rgba(255,176,32,.3);cursor:pointer;transition:.15s}
+.credit-chip:hover{background:rgba(255,176,32,.22)}
+.credit-chip .n{font-weight:800;font-size:15px;color:var(--gold)}
+.credit-chip .l{font-size:10.5px;opacity:.65;letter-spacing:.5px;text-transform:uppercase;font-weight:700}
+
+.topbar{height:66px;background:var(--surface);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:0 30px;position:sticky;top:0;z-index:40}
+.topbar h1{font-size:19px;font-weight:800;letter-spacing:-.4px}
+.topbar .sub{font-size:12.5px;color:var(--muted);font-weight:500}
+.top-actions{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 17px;border-radius:var(--r-sm);font-weight:700;font-size:13.5px;transition:.15s;white-space:nowrap;border:1px solid transparent}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--teal);color:#04231A;box-shadow:0 6px 16px -8px rgba(0,196,140,.9)}
+.btn-primary:hover{background:var(--teal-d)}
+.btn-navy{background:var(--navy);color:#fff}
+.btn-navy:hover{background:var(--navy-2)}
+.btn-gold{background:var(--gold);color:#3A2600}
+.btn-gold:hover{background:var(--gold-d)}
+.btn-red{background:var(--red);color:#fff}
+.btn-red:hover{background:#c92e3a}
+.btn-outline{border-color:var(--line-2);background:var(--surface);color:var(--text)}
+.btn-outline:hover{border-color:var(--navy);background:var(--surface-2)}
+.btn-ghost{color:var(--muted)}
+.btn-ghost:hover{background:var(--bg);color:var(--text)}
+.btn-sm{padding:7px 12px;font-size:12.5px;border-radius:9px}
+.btn-lg{padding:14px 26px;font-size:15px;border-radius:12px}
+.btn-block{width:100%}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
+.card-pad{padding:22px}
+.card-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.card-head h3{font-size:15.5px;font-weight:800}
+.card-head p{font-size:12.5px;color:var(--muted)}
+.card-head .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.card-body{padding:22px}
+
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.g-auto{grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+@media(max-width:1200px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh);position:relative;overflow:hidden}
+.stat::after{content:'';position:absolute;inset:0 auto 0 0;width:3px;background:var(--teal)}
+.stat.gold::after{background:var(--gold)}
+.stat.info::after{background:var(--info)}
+.stat.purple::after{background:var(--purple)}
+.stat.red::after{background:var(--red)}
+.stat .lbl{font-size:11.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.7px;display:flex;gap:6px;align-items:center}
+.stat .val{font-size:27px;font-weight:800;letter-spacing:-1px;margin-top:5px;line-height:1.1}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3.5px 9px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.3px;white-space:nowrap;line-height:1.4}
+.b-teal{background:var(--teal-l);color:#00775A}
+.b-gold{background:var(--gold-l);color:#8A5A00}
+.b-navy{background:#E8EEF5;color:var(--navy-2)}
+.b-info{background:var(--info-l);color:#1D4ED8}
+.b-warn{background:var(--warn-l);color:#8A5A00}
+.b-danger{background:var(--danger-l);color:#B4272C}
+.b-ok{background:var(--ok-l);color:#0A7A3C}
+.b-purple{background:var(--purple-l);color:#5533E0}
+.b-red{background:var(--red-l);color:#B4272C}
+.b-grey{background:#EEF2F7;color:var(--muted)}
+.b-solid-teal{background:var(--teal);color:#04231A}
+.b-solid-gold{background:var(--gold);color:#3A2600}
+
+.tier-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:8px;font-size:10.5px;font-weight:900;letter-spacing:.5px;text-transform:uppercase}
+.tier-1{background:#EEF2F7;color:#5A6B80}
+.tier-2{background:var(--info-l);color:#1D4ED8}
+.tier-3{background:var(--gold-l);color:#8A5A00;border:1px solid #FFE0A6}
+.tier-4{background:linear-gradient(135deg,#0A2540,#1B4E7A);color:#FFD980;border:1px solid #2E6A9E}
+
+.field{margin-bottom:16px}
+.field label{display:block;font-size:12.5px;font-weight:800;margin-bottom:6px}
+.field .hint{font-size:11.5px;color:var(--muted);font-weight:500;margin-top:5px;line-height:1.45}
+.field .req{color:var(--danger)}
+.input,.select,.textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line-2);border-radius:var(--r-sm);background:var(--surface);font-size:14px;transition:.15s;outline:none}
+.input:focus,.select:focus,.textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3.5px rgba(0,196,140,.13)}
+.textarea{resize:vertical;min-height:96px;line-height:1.55}
+.select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:36px}
+.row{display:grid;gap:14px}
+.row.c2{grid-template-columns:1fr 1fr}
+.row.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:760px){.row.c2,.row.c3{grid-template-columns:1fr}}
+
+.tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.tbl th{text-align:left;padding:11px 14px;font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:800;border-bottom:1px solid var(--line);background:var(--surface-2);white-space:nowrap}
+.tbl td{padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr:hover{background:var(--surface-2)}
+.tbl-wrap{overflow-x:auto}
+
+.job-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh);transition:.18s;cursor:pointer}
+.job-card:hover{border-color:var(--teal);box-shadow:0 12px 32px -14px rgba(10,37,64,.3);transform:translateY(-1px)}
+.job-title{font-weight:800;font-size:15.5px;letter-spacing:-.2px;margin-bottom:5px}
+.job-desc{font-size:13px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.meta-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.meta-pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--muted);background:var(--bg);padding:4px 9px;border-radius:7px}
+
+.biz-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);transition:.18s;display:flex;flex-direction:column;cursor:pointer}
+.biz-card:hover{transform:translateY(-2px);box-shadow:0 16px 40px -18px rgba(10,37,64,.35)}
+.biz-cover{height:82px;background:linear-gradient(135deg,var(--navy),var(--navy-3));position:relative}
+.biz-body{padding:16px;flex:1;display:flex;flex-direction:column}
+.biz-logo{width:56px;height:56px;border-radius:15px;background:linear-gradient(135deg,var(--teal),#0FA9FF);display:grid;place-items:center;font-weight:900;font-size:20px;color:#04231A;border:3.5px solid var(--surface);margin-top:-44px;margin-bottom:10px}
+.biz-name{font-weight:800;font-size:16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+.biz-cat{font-size:12.5px;color:var(--muted);font-weight:600;margin-top:2px}
+.stars{display:flex;align-items:center;gap:3px;font-size:12.5px;font-weight:700;color:var(--gold-d)}
+
+.landing-nav{height:72px;display:flex;align-items:center;gap:26px;padding:0 34px;background:rgba(255,255,255,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:60}
+.landing-nav .links{display:flex;gap:24px;margin-left:24px}
+.landing-nav .links a{font-size:14px;font-weight:700;color:var(--muted);cursor:pointer}
+.landing-nav .links a:hover{color:var(--navy)}
+.hero{background:radial-gradient(1000px 460px at 88% -12%,rgba(0,196,140,.20),transparent 62%),radial-gradient(760px 420px at 4% 108%,rgba(255,176,32,.14),transparent 62%),linear-gradient(160deg,#071B2F 0%,#0A2540 45%,#123A5E 100%);color:#fff;padding:82px 34px 92px;position:relative;overflow:hidden}
+.hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:2}
+.hero h1{font-size:clamp(32px,5.2vw,56px);font-weight:900;letter-spacing:-2px;line-height:1.06;margin-bottom:20px}
+.hero h1 .hl{background:linear-gradient(120deg,var(--teal),#4DE8BC 45%,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:17.5px;opacity:.82;max-width:640px;line-height:1.65;margin-bottom:32px}
+.hero-cta{display:flex;gap:13px;flex-wrap:wrap;margin-bottom:46px}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:820px}
+.hero-stats .hs b{display:block;font-size:28px;font-weight:900;letter-spacing:-1px;color:var(--teal)}
+.hero-stats .hs span{font-size:12.5px;opacity:.62;font-weight:600}
+@media(max-width:760px){.hero-stats{grid-template-columns:repeat(2,1fr)}.landing-nav .links{display:none}}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;background:rgba(0,196,140,.13);border:1px solid rgba(0,196,140,.32);font-size:11.5px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#5CE9BC;margin-bottom:22px}
+.section{padding:74px 34px}
+.section-inner{max-width:1180px;margin:0 auto}
+.section-title{font-size:clamp(24px,3.2vw,34px);font-weight:900;letter-spacing:-1.1px;margin-bottom:11px}
+.section-sub{font-size:15.5px;color:var(--muted);max-width:620px;line-height:1.65;margin-bottom:38px}
+.feature{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;box-shadow:var(--sh);transition:.2s;height:100%}
+.feature:hover{transform:translateY(-3px);box-shadow:var(--sh-lg);border-color:var(--teal)}
+.feature .fi{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;margin-bottom:15px;background:linear-gradient(135deg,var(--teal-l),#D6F5EA);color:#00775A}
+.feature h4{font-size:16.5px;font-weight:800;margin-bottom:8px}
+.feature p{font-size:13.8px;color:var(--muted);line-height:1.62}
+
+.overlay{position:fixed;inset:0;background:rgba(7,27,47,.62);backdrop-filter:blur(5px);z-index:200;display:flex;align-items:center;justify-content:center;padding:22px;overflow-y:auto}
+.modal{background:var(--surface);border-radius:var(--r-lg);width:100%;max-width:540px;box-shadow:var(--sh-lg);animation:pop .2s ease;max-height:92vh;display:flex;flex-direction:column}
+.modal.wide{max-width:860px}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal-head{padding:22px 26px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:14px}
+.modal-head h3{font-size:18px;font-weight:800}
+.modal-head p{font-size:13px;color:var(--muted);margin-top:3px}
+.modal-body{padding:24px 26px;overflow-y:auto;flex:1}
+.modal-foot{padding:17px 26px;border-top:1px solid var(--line);display:flex;gap:11px;justify-content:flex-end;background:var(--surface-2);border-radius:0 0 var(--r-lg) var(--r-lg)}
+.x-btn{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;color:var(--muted);margin-left:auto}
+.x-btn:hover{background:var(--bg)}
+
+.toast-wrap{position:fixed;top:20px;right:20px;z-index:400;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--navy);color:#fff;padding:13px 17px;border-radius:var(--r-sm);box-shadow:var(--sh-lg);font-size:13.5px;font-weight:600;display:flex;gap:10px;align-items:center;min-width:270px;max-width:400px;animation:slidein .25s ease}
+@keyframes slidein{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+.toast.ok{background:#0B5D3B;border-left:3px solid var(--teal)}
+.toast.err{background:#8B1F23;border-left:3px solid #FF6B6B}
+.toast.info{background:var(--navy-2);border-left:3px solid var(--info)}
+
+.empty{text-align:center;padding:60px 22px;color:var(--muted)}
+.empty .ei{width:64px;height:64px;border-radius:19px;background:var(--bg);display:grid;place-items:center;margin:0 auto 16px;color:var(--muted-2)}
+.empty h4{font-size:16.5px;font-weight:800;color:var(--text);margin-bottom:6px}
+.empty p{font-size:13.5px;max-width:380px;margin:0 auto 18px;line-height:1.6}
+.divider{height:1px;background:var(--line);margin:18px 0}
+.pill-tabs{display:flex;gap:5px;background:var(--bg);padding:4px;border-radius:11px;flex-wrap:wrap}
+.pill-tab{padding:7px 14px;border-radius:8px;font-size:12.8px;font-weight:700;color:var(--muted);transition:.15s}
+.pill-tab.active{background:var(--surface);color:var(--navy);box-shadow:0 1px 3px rgba(10,37,64,.12)}
+.progress{height:7px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#38E0B0);border-radius:99px;transition:width .4s}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--muted);font-weight:600}
+.kv .v{font-weight:700;text-align:right}
+.flex{display:flex}.between{justify-content:space-between}.center{align-items:center}
+.gap6{gap:6px}.gap10{gap:10px}.gap14{gap:14px}.gap20{gap:20px}.wrap{flex-wrap:wrap}
+.mt6{margin-top:6px}.mt10{margin-top:10px}.mt14{margin-top:14px}.mt18{margin-top:18px}.mt24{margin-top:24px}
+.mb6{margin-bottom:6px}.mb10{margin-bottom:10px}.mb14{margin-bottom:14px}.mb18{margin-bottom:18px}.mb24{margin-bottom:24px}
+.muted{color:var(--muted)}.small{font-size:12.5px}.tiny{font-size:11.5px}
+.bold{font-weight:800}.right{text-align:right}.center-text{text-align:center}
+.alert{padding:13px 16px;border-radius:var(--r-sm);font-size:13.2px;line-height:1.6;display:flex;gap:11px;align-items:flex-start}
+.alert-info{background:var(--info-l);color:#1B3F8F;border:1px solid #CFE0FB}
+.alert-warn{background:var(--warn-l);color:#7A5200;border:1px solid #FCE3AE}
+.alert-ok{background:var(--ok-l);color:#0A6B36;border:1px solid #C3ECD5}
+.alert-danger{background:var(--danger-l);color:#A52126;border:1px solid #F8CFD0}
+.alert-gold{background:var(--gold-l);color:#7A5200;border:1px solid #FFE3AE}
+.alert-red{background:var(--red-l);color:#B4272C;border:1px solid #F8CFD0}
+.ico{display:block}
+.hide{display:none!important}
+.link{color:var(--teal-d);font-weight:700;cursor:pointer}
+.link:hover{text-decoration:underline}
+.msg{padding:11px 14px;border-radius:12px;font-size:13.5px;line-height:1.55;max-width:78%;margin-bottom:10px;word-wrap:break-word}
+.msg.me{background:var(--navy);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+.msg.them{background:var(--bg);border-bottom-left-radius:4px}
+.msg .t{font-size:10.5px;opacity:.55;margin-top:4px;display:block}
+.msg.me .t{color:rgba(255,255,255,.65)}
+.msg.them .t{color:var(--muted)}
+.mobile-only{display:none}
+@media(max-width:980px){
+  .sidebar{position:fixed;left:0;top:0;z-index:150;transform:translateX(-100%);transition:.25s;box-shadow:var(--sh-lg)}
+  .sidebar.open{transform:none}
+  .mobile-only{display:inline-flex}
+  .content{padding:18px 16px 60px}
+  .topbar{padding:0 16px}
+}
+.ref-box{background:var(--navy);color:#fff;padding:16px 20px;border-radius:var(--r);font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:17px;font-weight:800;letter-spacing:1.5px;text-align:center;word-break:break-all;position:relative}
+.copy-btn{position:absolute;top:8px;right:8px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:4px 9px;border-radius:6px;font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;transition:.15s}
+.copy-btn:hover{background:rgba(255,255,255,.25)}
+.qr-card{background:linear-gradient(135deg,#fff 0%,#FAFCFE 100%);border:2px solid var(--line);border-radius:var(--r-lg);padding:22px;text-align:center;margin:14px 0}
+.qr-card img{width:260px;height:260px;margin:0 auto 14px;display:block;border-radius:12px;box-shadow:0 8px 24px -8px rgba(10,37,64,.25)}
+.qr-card .scan-label{font-size:14px;font-weight:900;letter-spacing:3px;text-transform:uppercase;color:var(--navy);margin-top:8px}
+.qr-card .qr-sub{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px}
+.amount-big{font-size:38px;font-weight:900;letter-spacing:-1.6px;color:var(--navy);text-align:center;margin:8px 0}
+.amount-big small{font-size:14px;color:var(--muted);font-weight:700;letter-spacing:.5px;display:block;margin-top:2px}
+.step-badges{display:flex;gap:8px;justify-content:center;margin-bottom:18px;flex-wrap:wrap}
+.step-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:99px;font-size:11.5px;font-weight:800;background:var(--bg);color:var(--muted);border:1px solid var(--line)}
+.step-badge.active{background:var(--teal);color:#04231A;border-color:var(--teal)}
+.step-badge.done{background:var(--ok-l);color:#0A6B36;border-color:#C3ECD5}
+.payment-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+@media(max-width:760px){.payment-grid{grid-template-columns:1fr}}
+.bank-detail{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line);font-size:13.5px}
+.bank-detail:last-child{border-bottom:none}
+.bank-detail .lbl{color:var(--muted);font-weight:600}
+.bank-detail .val{font-weight:800;text-align:right;font-family:ui-monospace,"SF Mono",Menlo,monospace;letter-spacing:.5px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="toast-wrap" id="toasts"></div>
+<div id="modal-root"></div>
+
+<script>
+'use strict';
+
+/* ============ CONFIG ============ */
+const CFG = {
+  appName: 'Taskora',
+  creditValue: 2,
+  fixedBatchCredits: 400,
+  fixedBatchPrice: 400,
+  postJobCost: 30,
+  qrImagePath: 'capitec-qr.jpeg',
+  bank: {
+    holder: 'Taskora',
+    bank: 'Capitec Bank',
+    accountNumber: '1637042122',
+    branchCode: '470010',
+    accountType: 'Savings'
+  }
+};
+
+/* ============ ICONS ============ */
+const ICON={
+  home:'<path d="M3 10.2 12 3l9 7.2V20a1 1 0 0 1-1 1h-5v-6.5H9V21H4a1 1 0 0 1-1-1z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  user:'<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>',
+  users:'<circle cx="9" cy="8" r="3.4"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M17 5.3a3.4 3.4 0 0 1 0 6.5"/>',
+  briefcase:'<rect x="2.5" y="7" width="19" height="13" rx="2.2"/><path d="M8.5 7V5.2A2.2 2.2 0 0 1 10.7 3h2.6a2.2 2.2 0 0 1 2.2 2.2V7"/>',
+  file:'<path d="M14 2.5H7A2 2 0 0 0 5 4.5v15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7.5z"/><path d="M14 2.5v5h5"/>',
+  shield:'<path d="M12 2.5 4.5 5.7v5.5c0 5 3.2 8.9 7.5 10.3 4.3-1.4 7.5-5.3 7.5-10.3V5.7z"/><path d="m9 12 2 2 4-4"/>',
+  shieldCheck:'<path d="M12 2.5 4.5 5.7v5.5c0 5 3.2 8.9 7.5 10.3 4.3-1.4 7.5-5.3 7.5-10.3V5.7z"/><path d="m9 12 2 2 4-4"/>',
+  coin:'<circle cx="12" cy="12" r="9"/><path d="M12 7.2v9.6M14.6 9.6c-.6-.9-1.6-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.6 6 1.5 6 4 0 1.3-1.2 2.1-2.7 2.1-1.2 0-2.2-.5-2.8-1.4"/>',
+  chart:'<path d="M3 20h18"/><path d="M6.5 20V11M11.5 20V5M16.5 20v-6"/>',
+  chat:'<path d="M21 11.5a8 8 0 0 1-8 8H8l-4.5 3v-4.6A8 8 0 0 1 8 3.5h5a8 8 0 0 1 8 8z"/>',
+  settings:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5v.2a2 2 0 1 1-4 0v-.1a1.6 1.6 0 0 0-1-1.5 1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.6 1.6 0 0 0 1.5-1 1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1h.2a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/>',
+  star:'<path d="m12 2.6 2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.5l-5.8 3 1.1-6.45-4.7-4.6 6.5-.95z"/>',
+  check:'<path d="m5 12.5 4.5 4.5L19 7"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 1.9"/>',
+  pin:'<path d="M12 21s7-5.7 7-11a7 7 0 1 0-14 0c0 5.3 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+  phone:'<path d="M21 16.9v2.6a1.8 1.8 0 0 1-2 1.8 17.6 17.6 0 0 1-7.7-2.7 17.3 17.3 0 0 1-5.3-5.3A17.6 17.6 0 0 1 3.3 5.5a1.8 1.8 0 0 1 1.8-2h2.6a1.8 1.8 0 0 1 1.8 1.6c.1.9.35 1.8.7 2.6a1.8 1.8 0 0 1-.4 1.9l-1.1 1.1a14 14 0 0 0 5.3 5.3l1.1-1.1a1.8 1.8 0 0 1 1.9-.4c.85.35 1.7.6 2.6.7a1.8 1.8 0 0 1 1.6 1.7z"/>',
+  mail:'<rect x="2.5" y="4.5" width="19" height="15" rx="2.4"/><path d="m3 7 8.1 5.6a1.6 1.6 0 0 0 1.8 0L21 7"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3.2 9h17.6M3.2 15h17.6"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z"/>',
+  building:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/>',
+  tag:'<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.5l.3-7.1a2 2 0 0 1 1.9-1.9l7.1-.3a2 2 0 0 1 1.5.6l7.2 7.2a2 2 0 0 1 0 2.8z"/><circle cx="8.2" cy="8.2" r="1.4"/>',
+  wallet:'<rect x="2.5" y="5.5" width="19" height="14" rx="2.4"/><path d="M2.5 10h19"/><circle cx="17" cy="15" r="1.3"/>',
+  trend:'<path d="m3 16 5.5-5.5 4 4L21 6"/><path d="M15 6h6v6"/>',
+  award:'<circle cx="12" cy="9" r="6"/><path d="m8.5 14.5-1.5 7 5-2.8 5 2.8-1.5-7"/>',
+  alert:'<path d="M12 3 2.5 20h19z"/><path d="M12 9.5v4.5M12 17.2h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 7.8h.01"/>',
+  menu:'<path d="M4 7h16M4 12h16M4 17h16"/>',
+  arrowRight:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  arrowLeft:'<path d="M19 12H5M11 18l-6-6 6-6"/>',
+  layers:'<path d="m12 2.5 9 5-9 5-9-5z"/><path d="m3 12.5 9 5 9-5"/><path d="m3 17 9 5 9-5"/>',
+  bolt:'<path d="M13 2 4.5 13.5H11L10 22l8.5-11.5H12z"/>',
+  sparkle:'<path d="M12 3v5M12 16v5M3 12h5M16 12h5"/>',
+  cart:'<circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2.5 3.5h3l2.6 12.2a1.8 1.8 0 0 0 1.8 1.4h8.4a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/>',
+  clipboard:'<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V2.8h6V4"/><path d="M9 10h6M9 14h4"/>',
+  target:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4"/>',
+  send:'<path d="m22 2-7 20-4-9-9-4z"/><path d="M22 2 11 13"/>',
+  copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM19 19h2v2h-2zM14 19h2v2h-2zM19 14h2v2h-2z"/>'
+};
+function icon(n,s){s=s||18;return '<svg class="ico" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+(ICON[n]||'')+'</svg>';}
+function starIcon(s){return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="currentColor" style="display:inline-block;vertical-align:-1px"><path d="m12 2.6 2.9 5.9 6.5.95-4.7 4.6 1.1 6.45L12 17.5l-5.8 3 1.1-6.45-4.7-4.6 6.5-.95z"/></svg>';}
+
+/* ============ HELPERS ============ */
+const $=(s,r)=>(r||document).querySelector(s);
+const $$=(s,r)=>Array.prototype.slice.call((r||document).querySelectorAll(s));
+const uid=p=>(p||'id')+'_'+Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-3);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const now=()=>new Date().toISOString();
+const R=n=>'R'+Number(n||0).toLocaleString('en-ZA',{minimumFractionDigits:0,maximumFractionDigits:2});
+function timeAgo(iso){const d=(Date.now()-new Date(iso).getTime())/1000;if(d<60)return 'just now';if(d<3600)return Math.floor(d/60)+'m ago';if(d<86400)return Math.floor(d/3600)+'h ago';if(d<604800)return Math.floor(d/86400)+'d ago';return new Date(iso).toLocaleDateString('en-ZA',{day:'numeric',month:'short'});}
+function fmtDate(iso){return new Date(iso).toLocaleDateString('en-ZA',{day:'numeric',month:'short',year:'numeric'});}
+function initials(n){return String(n||'?').split(/\s+/).filter(Boolean).slice(0,2).map(w=>w[0].toUpperCase()).join('');}
+function genPaymentRef(){const d=new Date();const ymd=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');const rand=Math.random().toString(36).slice(2,8).toUpperCase();return 'TSK400-'+ymd+'-'+rand;}
+
+/* ============ CATEGORIES ============ */
+const CATEGORIES={
+  'Home & Emergency Services':['Plumbing','Electrical','Locksmith','Air Conditioning','Cleaning','Pest Control','Handyman','Roofing','Painting','Flooring','Appliance Repair','Moving & Storage','Garden & Landscaping','Waterproofing','Drain Cleaning','Geyser Installation'],
+  'Construction & Renovation':['Building Contractors','Tiling','Ceilings & Partitioning','Paving','Welding & Steelwork','Quantity Surveying','Architecture','Kitchen Remodeling','Bathroom Remodeling','Concrete Works','Scaffolding'],
+  'Solar & Energy':['Solar Panel Installation','Inverter & Battery','Generators','Energy Audits','Load Shedding Solutions','Solar Geysers','Off-Grid Systems'],
+  'Automotive & Vehicle Services':['Mechanics','Panel Beaters','Tyres & Fitment','Car Sales','Car Finance','Vehicle Inspection','Car Wash & Detailing','Towing & Recovery','Auto Electrical','Spare Parts'],
+  'Property & Real Estate':['Estate Agents','Rental Listings','Property Management','Bond Originators','Property Valuers','Conveyancing','Commercial Property'],
+  'Technology & IT':['Web Development','Software Development','IT Support','CCTV & Surveillance','Networking','Mobile Apps','Cloud Services','Data & Analytics','Cybersecurity','POS Systems'],
+  'Professional Services':['Legal Services','Accounting & Bookkeeping','Tax Consulting','Business Consulting','HR & Payroll','Recruitment','Business Coaching','Insurance','Company Registration','Compliance'],
+  'Marketing & Media':['Digital Marketing','SEO','Graphic Design','Printing','Photography','Videography','Public Relations','Social Media Management','Branding','Signage'],
+  'Health & Wellness':['General Practitioners','Dentists','Physiotherapy','Optometrists','Psychologists','Gyms & Fitness','Nutritionists','Home Nursing','Occupational Health'],
+  'Beauty & Personal Care':['Hair Salons','Nail Technicians','Spa & Massage','Makeup Artists','Barbers','Tattoo & Piercing','Skincare'],
+  'Education & Training':['Tutors','Private Schools','Driving Schools','Skills Training','Online Courses','Language Classes','Exam Preparation','Corporate Training'],
+  'Logistics & Transport':['Courier Services','Freight & Haulage','Trucking','Warehousing','Removals','Last-Mile Delivery','Customs Clearing','Fleet Services'],
+  'Agriculture & Farming':['Farm Supplies','Agricultural Equipment','Livestock','Irrigation','Agro-Processing','Seeds & Fertiliser','Poultry'],
+  'Food & Hospitality':['Catering','Restaurants','Bakeries','Event Venues','Tourism','Accommodation','Food Trucks','Coffee Shops'],
+  'Events & Entertainment':['Event Planning','DJs','Decor & Styling','Sound & Lighting','Venues','Security for Events','MCs & Performers','Photobooths'],
+  'Security & Safety':['Armed Response','Security Guards','Alarms','Electric Fencing','Fire Equipment','Access Control','CCTV Monitoring'],
+  'Retail & Wholesale Products':['Electronics','Furniture','Clothing & Apparel','Equipment','Packaging','Building Supplies','Stationery','Homeware','Wholesale Groceries'],
+  'Industrial & Manufacturing':['Machinery','Metal Fabrication','Tooling','Chemicals','Packaging Manufacturing','Plastics','Engineering'],
+  'Financial Services':['Business Loans','Personal Loans','Investments','Debt Review','Bookkeeping','Financial Planning','Forex & Payments'],
+  'Pets & Animal Services':['Veterinary','Pet Grooming','Pet Boarding','Dog Training','Pet Supplies','Pet Transport'],
+  'Travel & Tourism':['Travel Agents','Tour Operators','Shuttles & Transfers','Safari Packages','Accommodation Booking','Corporate Travel'],
+  'Sports & Recreation':['Sports Coaching','Sports Equipment','Clubs & Academies','Outdoor Adventures','Personal Training'],
+  'Government & Compliance':['Permits & Licensing','B-BBEE Compliance','Fire Compliance','Health & Safety','Environmental Compliance','Municipal Approvals'],
+  'Other / General':['General Services','General Products','Specialised Requests','Not Listed Above']
+};
+const CAT_NAMES=Object.keys(CATEGORIES);
+const CITIES=['Johannesburg','Sandton','Pretoria','Centurion','Cape Town','Durban','Port Elizabeth','East London','Bloemfontein','Stellenbosch','Paarl','Soweto','Midrand','Roodepoort','Benoni','Boksburg','Polokwane','Nelspruit','Kimberley','Pietermaritzburg','George','Knysna','Rustenburg','Vereeniging','Krugersdorp'];
+
+const JOB_TIERS={
+  1:{name:'Quick Fix',min:15,max:25,desc:'Small repair, single task, under 1 day'},
+  2:{name:'Standard',min:30,max:60,desc:'Full service, small project, 1-5 days'},
+  3:{name:'Large Project',min:80,max:120,desc:'Big contract, multi-month, high value'}
+};
+
+/* ============ DATABASE ============ */
+const DB_KEY='taskora_db_v3';
+let DB=null;
+function saveDB(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB));}catch(e){console.warn(e);}}
+function loadDB(){try{const r=localStorage.getItem(DB_KEY);if(r){DB=JSON.parse(r);return;}}catch(e){}seedDB();}
+function seedDB(){
+  DB={users:[],businesses:[],jobs:[],bids:[],messages:[],ratings:[],transactions:[],paymentRefs:[],meta:{seeded:now()}};
+  DB.users.push({id:'u_admin',name:'Taskora Admin',email:'admin@taskora.co.za',password:'KARANKA20261990',role:'admin',phone:'+27 11 000 0000',credits:0,createdAt:now()});
+  DB.users.push({id:'u_c1',name:'Thandi Mokoena',email:'buyer@example.com',password:'buyer123',role:'customer',phone:'+27 82 555 0111',credits:500,createdAt:now()});
+  DB.users.push({id:'u_c2',name:'David Naidoo',email:'david@example.com',password:'buyer123',role:'customer',phone:'+27 83 555 0222',credits:120,createdAt:now()});
+  const bizSeeds=[
+    {n:'AquaFix Plumbing & Drains',cat:'Home & Emergency Services',sub:'Plumbing',city:'Sandton',street:'142 Rivonia Road',suburb:'Sandton CBD',postal:'2196',web:'https://aquafix.co.za',reg:'2018/445123/07',level:4,rating:4.9,rev:214,jobs:891,credits:940,owner:'Sipho Ndlovu',email:'pro@example.com',desc:'24/7 emergency plumbing specialists serving Sandton, Rosebank and Bryanston. Burst pipes, geysers, blocked drains and leak detection with a 60-minute response guarantee.'},
+    {n:'VoltCore Electrical Solutions',cat:'Home & Emergency Services',sub:'Electrical',city:'Johannesburg',street:'88 Commissioner Street',suburb:'Marshalltown',postal:'2001',web:'https://voltcore.co.za',reg:'2016/778311/07',level:4,rating:4.8,rev:167,jobs:640,credits:620,owner:'Lerato Dube',email:'volt@example.com',desc:'Registered electrical contractors for residential and commercial installations, COCs, load shedding solutions and DB board upgrades.'},
+    {n:'Cape Solar Works',cat:'Solar & Energy',sub:'Solar Panel Installation',city:'Cape Town',street:'27 Marine Drive',suburb:'Paarden Eiland',postal:'7405',web:'https://capesolarworks.co.za',reg:'2019/223987/07',level:3,rating:4.9,rev:98,jobs:312,credits:1250,owner:'Riaan Botha',email:'riaan@example.com',desc:'Tier-1 solar PV and battery backup installers. Grid-tied, hybrid and off-grid systems with CoC and 10-year workmanship warranty.'},
+    {n:'Bright & Tidy Cleaning Co.',cat:'Home & Emergency Services',sub:'Cleaning',city:'Pretoria',street:'15 Lynnwood Road',suburb:'Lynnwood',postal:'0081',web:'https://brightandtidy.co.za',reg:'2020/119004/07',level:3,rating:4.7,rev:143,jobs:1204,credits:410,owner:'Nomvula Khumalo',email:'nomvula@example.com',desc:'Deep cleaning, move-in/move-out, office cleaning and carpet extraction across Pretoria East. Vetted, insured staff.'},
+    {n:'AutoMedic Workshop',cat:'Automotive & Vehicle Services',sub:'Mechanics',city:'Durban',street:'301 Umgeni Road',suburb:'Springfield',postal:'4001',web:'https://automedic.co.za',reg:'2015/556200/07',level:3,rating:4.6,rev:212,jobs:1580,credits:780,owner:'Rajesh Pillay',email:'rajesh@example.com',desc:'Full-service independent workshop: servicing, diagnostics, brakes, clutch and suspension for all major brands. RMI accredited.'},
+    {n:'Shield Home Security',cat:'Security & Safety',sub:'Alarms',city:'Midrand',street:'9 Richards Drive',suburb:'Halfway House',postal:'1685',web:'https://shieldhome.co.za',reg:'2017/331244/07',level:2,rating:4.5,rev:76,jobs:298,credits:180,owner:'Kabelo Maseko',email:'kabelo@example.com',desc:'Alarm installation, electric fencing, CCTV and 24/7 monitoring packages for homes and small businesses.'},
+    {n:'LegalEase Attorneys',cat:'Professional Services',sub:'Legal Services',city:'Sandton',street:'12 Fredman Drive',suburb:'Sandown',postal:'2196',web:'https://legalease.co.za',reg:'2012/990221/07',level:3,rating:4.9,rev:64,jobs:190,credits:600,owner:'Adv. Palesa Mthembu',email:'palesa@example.com',desc:'Commercial law, contract drafting, property transfers, labour disputes and debt recovery for SMEs.'},
+    {n:'SwiftMove Logistics',cat:'Logistics & Transport',sub:'Removals',city:'Johannesburg',street:'21 Isando Road',suburb:'Isando',postal:'1600',web:'https://swiftmove.co.za',reg:'2014/221098/07',level:3,rating:4.7,rev:189,jobs:2100,credits:880,owner:'Michael Zulu',email:'michael@example.com',desc:'Household and office removals, packing services, storage and long-distance transport nationwide.'},
+    {n:'NovaTech IT Support',cat:'Technology & IT',sub:'IT Support',city:'Sandton',street:'33 Fricker Road',suburb:'Illovo',postal:'2196',web:'https://novatech.co.za',reg:'2020/334119/07',level:3,rating:4.8,rev:92,jobs:520,credits:340,owner:'Farhan Ismail',email:'farhan@example.com',desc:'Managed IT services, helpdesk, Microsoft 365, network setup and cybersecurity for SMEs.'},
+    {n:'PixelForge Digital',cat:'Marketing & Media',sub:'Digital Marketing',city:'Cape Town',street:'55 Kloof Street',suburb:'Gardens',postal:'8001',web:'https://pixelforge.africa',reg:'2019/778001/07',level:3,rating:4.8,rev:121,jobs:340,credits:520,owner:'Amy van Wyk',email:'amy@example.com',desc:'Performance marketing, SEO and paid social for growth-stage businesses.'}
+  ];
+  bizSeeds.forEach(function(b,i){
+    const oid='u_b_'+i;
+    DB.users.push({id:oid,name:b.owner,email:b.email,password:'pro123',role:'business',phone:'+27 8'+(i%5+1)+' 555 1'+(100+i),credits:b.credits,createdAt:now()});
+    DB.businesses.push({
+      id:'b_'+i,ownerId:oid,name:b.n,category:b.cat,subcategory:b.sub,description:b.desc,
+      phone:'+27 8'+(i%5+1)+' 555 1'+(100+i),email:b.email,website:b.web,
+      address:{street:b.street,suburb:b.suburb,city:b.city,province:'',postal:b.postal},
+      companyReg:b.reg,
+      certs:b.level>=2?[{name:'Company Registration Certificate',type:'CIPC',ref:b.reg,fileName:'cipc_cor.pdf'}]:[],
+      proprietorCerts:b.level>=4?[{name:'Trade Certification',issuer:'Industry Body',ref:'CERT-'+i,fileName:'cert.pdf'}]:[],
+      verificationLevel:b.level,rating:b.rating,reviewsCount:b.rev,completedJobs:b.jobs,
+      responseMinutes:4+(i%12),serviceAreas:[b.city],createdAt:now(),active:true
+    });
+  });
+  const jobSeeds=[
+    {t:'Burst pipe under kitchen sink',cat:'Home & Emergency Services',sub:'Plumbing',city:'Sandton',tier:1,budget:'R1,500 – R3,000',desc:'Water pouring from under the kitchen sink. Main valve shut. Need someone within 2 hours.',cid:'u_c1'},
+    {t:'Prepaid meter keeps tripping',cat:'Home & Emergency Services',sub:'Electrical',city:'Johannesburg',tier:1,budget:'R800 – R2,000',desc:'Prepaid meter trips when geyser switches on. Suspect earth leakage. Need registered electrician.',cid:'u_c2'},
+    {t:'Install 5kW inverter + battery backup',cat:'Solar & Energy',sub:'Inverter & Battery',city:'Cape Town',tier:3,budget:'R35,000 – R55,000',desc:'5kW hybrid inverter with lithium battery. Include CoC and warranty.',cid:'u_c1'},
+    {t:'Deep clean 3-bed house before move-in',cat:'Home & Emergency Services',sub:'Cleaning',city:'Pretoria',tier:2,budget:'R1,200 – R2,500',desc:'Empty house, full deep clean incl. carpets, windows, kitchen, bathrooms.',cid:'u_c2'},
+    {t:'Full service + brakes — Toyota Hilux',cat:'Automotive & Vehicle Services',sub:'Mechanics',city:'Durban',tier:2,budget:'R6,000 – R12,000',desc:'2019 Hilux due for 120,000km service. Brake pads and discs need replacing.',cid:'u_c1'},
+    {t:'Commercial lease agreement review',cat:'Professional Services',sub:'Legal Services',city:'Sandton',tier:2,budget:'R5,000 – R15,000',desc:'Review 5-year commercial lease for retail space.',cid:'u_c2'},
+    {t:'Office alarm + CCTV installation',cat:'Security & Safety',sub:'Alarms',city:'Midrand',tier:3,budget:'R12,000 – R25,000',desc:'New 240sqm office. Alarm + 6 cameras + remote monitoring.',cid:'u_c1'},
+    {t:'Website redesign for accounting firm',cat:'Technology & IT',sub:'Web Development',city:'Pretoria',tier:3,budget:'R25,000 – R60,000',desc:'12-page redesign with client portal, blog, contact forms.',cid:'u_c2'}
+  ];
+  jobSeeds.forEach(function(j,i){
+    DB.jobs.push({
+      id:'j_'+i,customerId:j.cid,title:j.t,description:j.desc,category:j.cat,subcategory:j.sub,location:j.city,
+      tier:j.tier,budget:j.budget,status:'open',createdAt:new Date(Date.now()-(i*6+1)*3600000).toISOString(),
+      views:8+i*5,acceptedBidId:null,completedAt:null
+    });
+  });
+  DB.bids.push(
+    {id:uid('bid'),jobId:'j_0',businessId:'b_0',amount:2450,days:1,message:'We can be on site within 90 minutes. Includes replacement of split joint and 12-month guarantee.',creditsSpent:20,status:'pending',createdAt:new Date(Date.now()-3600000).toISOString()},
+    {id:uid('bid'),jobId:'j_3',businessId:'b_3',amount:1850,days:1,message:'Full deep clean of 180sqm including carpet extraction and kitchen degrease.',creditsSpent:40,status:'pending',createdAt:new Date(Date.now()-7200000).toISOString()}
+  );
+  DB.messages.push(
+    {id:uid('m'),jobId:'j_0',fromId:'b_0',toId:'u_c1',body:'Good day, we can be there within 90 minutes. Is the water still shut off?',createdAt:new Date(Date.now()-3000000).toISOString(),read:true},
+    {id:uid('m'),jobId:'j_0',fromId:'u_c1',toId:'b_0',body:'Yes, main valve is closed. Please come as soon as possible.',createdAt:new Date(Date.now()-2400000).toISOString(),read:true}
+  );
+  /* Seed one pending payment for demo */
+  DB.paymentRefs.push({
+    id:uid('pr'),userId:'u_c1',reference:'TSK400-20260101-DEMO01',
+    credits:400,amount:400,status:'pending',
+    createdAt:new Date(Date.now()-7200000).toISOString(),
+    userMarkedPaid:true,userPaidAt:new Date(Date.now()-7000000).toISOString()
+  });
+  saveDB();
+}
+
+/* ============ STATE ============ */
+const S={user:null,route:'landing',params:{},filters:{q:'',category:'',city:''},signupRole:'customer',chatJobId:null,chatOtherId:null,sidebarOpen:false,starPick:0,adminTab:'payments'};
+const SESSION_KEY='taskora_session';
+function persistSession(){try{localStorage.setItem(SESSION_KEY,JSON.stringify({uid:S.user?S.user.id:null}));}catch(e){}}
+function restoreSession(){try{const r=localStorage.getItem(SESSION_KEY);if(!r)return;const s=JSON.parse(r);if(s&&s.uid){S.user=DB.users.find(function(u){return u.id===s.uid;})||null;}}catch(e){}}
+
+/* ============ GETTERS ============ */
+function getUser(id){return DB.users.find(function(u){return u.id===id;});}
+function getBiz(id){return DB.businesses.find(function(b){return b.id===id;});}
+function getJob(id){return DB.jobs.find(function(j){return j.id===id;});}
+function myBiz(){return DB.businesses.find(function(b){return b.ownerId===(S.user?S.user.id:'');});}
+function bidsForJob(jid){return DB.bids.filter(function(b){return b.jobId===jid;});}
+function bidsForBiz(bid){return DB.bids.filter(function(b){return b.businessId===bid;});}
+function jobsForCustomer(cid){return DB.jobs.filter(function(j){return j.customerId===cid;});}
+function ratingsForBiz(bid){return DB.ratings.filter(function(r){return r.businessId===bid;});}
+function paymentRefsForUser(uid){return DB.paymentRefs.filter(function(p){return p.userId===uid;});}
+function pendingRefs(){return DB.paymentRefs.filter(function(p){return p.status==='pending';});}
+
+/* ============ TOAST / MODAL ============ */
+function toast(msg,type){
+  const wrap=$('#toasts');const el=document.createElement('div');
+  el.className='toast '+(type||'info');
+  el.innerHTML=(type==='ok'?icon('check',16):type==='err'?icon('alert',16):icon('info',16))+'<span>'+esc(msg)+'</span>';
+  wrap.appendChild(el);
+  setTimeout(function(){el.style.transition='.3s';el.style.opacity='0';el.style.transform='translateX(30px)';setTimeout(function(){el.remove();},300);},3500);
+}
+function openModal(html,wide){$('#modal-root').innerHTML='<div class="overlay" data-action="overlay-close"><div class="modal'+(wide?' wide':'')+'" data-stop="1">'+html+'</div></div>';document.body.style.overflow='hidden';}
+function closeModal(){$('#modal-root').innerHTML='';document.body.style.overflow='';}
+
+/* ============ BADGES ============ */
+const VERIF={0:{n:'Unverified',c:'tier-1'},1:{n:'Contact Verified',c:'tier-1'},2:{n:'Verified Business',c:'tier-2'},3:{n:'Top Tier Verified',c:'tier-3'},4:{n:'Elite Verified',c:'tier-4'}};
+function tierBadge(l){const v=VERIF[l]||VERIF[0];const ic=l>=4?'award':l>=3?'shieldCheck':l>=2?'shield':'info';return '<span class="tier-badge '+v.c+'">'+icon(ic,11)+v.n+'</span>';}
+function statusBadge(s){const m={open:['b-info','Open'],pending:['b-warn','Pending'],accepted:['b-ok','Accepted'],rejected:['b-danger','Rejected'],completed:['b-ok','Completed'],cancelled:['b-grey','Cancelled'],verified:['b-ok','Verified'],failed:['b-danger','Failed'],paid:['b-ok','Paid'],expired:['b-grey','Expired']};const x=m[s]||['b-grey',s];return '<span class="badge '+x[0]+'">'+esc(x[1])+'</span>';}
+function tierName(t){return (JOB_TIERS[t]||{}).name||'Standard';}
+function tierBidCost(t){return JOB_TIERS[t]||JOB_TIERS[2];}
+function starRow(rating,count){return '<span class="stars">'+starIcon(13)+'<b>'+Number(rating||0).toFixed(1)+'</b>'+(count!=null?'<span class="muted small" style="font-weight:600">('+count+')</span>':'')+'</span>';}
+function emptyState(icn,title,text,actionHtml){return '<div class="empty"><div class="ei">'+icon(icn,28)+'</div><h4>'+esc(title)+'</h4><p>'+esc(text)+'</p>'+(actionHtml||'')+'</div>';}
+
+/* ============ ROUTER ============ */
+function go(route,params){S.route=route;S.params=params||{};S.sidebarOpen=false;window.scrollTo(0,0);render();}
+function render(){
+  const app=$('#app');
+  const pub=['landing','login','register','browse','business-public'].indexOf(S.route)>-1;
+  if(pub){app.innerHTML=renderPublic();}
+  else{if(!S.user){go('login');return;}app.innerHTML=renderApp();}
+  bindGlobal();
+}
+
+/* ============ PUBLIC ============ */
+function publicNav(){
+  const logged=!!S.user;
+  return '<nav class="landing-nav">'+
+    '<div class="brand" data-action="go" data-route="landing" style="cursor:pointer"><div class="brand-mark">'+icon('target',20)+'</div><div class="brand-text"><b>Taskora</b><span>Verified Jobs</span></div></div>'+
+    '<div class="links"><a data-action="go" data-route="browse">Browse Businesses</a><a data-action="go" data-route="register" data-role="business">For Business</a></div>'+
+    '<div class="top-actions">'+
+      (logged?'<button class="btn btn-navy btn-sm" data-action="go-dashboard">'+icon('chart',15)+' Dashboard</button>'
+        :'<button class="btn btn-ghost btn-sm" data-action="go" data-route="login">Sign in</button><button class="btn btn-primary btn-sm" data-action="go" data-route="register">Get started free</button>')+
+    '</div></nav>';
+}
+function renderPublic(){
+  if(S.route==='landing')return publicNav()+renderLanding();
+  if(S.route==='login')return publicNav()+renderLogin();
+  if(S.route==='register')return publicNav()+renderRegister();
+  if(S.route==='browse')return publicNav()+renderBrowse();
+  if(S.route==='business-public')return publicNav()+renderBusinessPublic();
+  return publicNav()+renderLanding();
+}
+function renderLanding(){
+  const top=DB.businesses.slice().sort(function(a,b){return b.verificationLevel-a.verificationLevel||b.rating-a.rating;}).slice(0,6);
+  return '<header class="hero"><div class="hero-inner">'+
+    '<div class="eyebrow">'+icon('sparkle',13)+' Verified demand · Real buyers · Tracked outcomes</div>'+
+    '<h1>Connect with customers<br>who are <span class="hl">ready to buy now</span>.</h1>'+
+    '<p class="lead">Taskora is a two-sided marketplace that matches real customer jobs with verified businesses — then tracks the work from first contact all the way to payment.</p>'+
+    '<div class="hero-cta">'+
+      '<button class="btn btn-primary btn-lg" data-action="go" data-route="register" data-role="business">'+icon('briefcase',18)+' List your business</button>'+
+      '<button class="btn btn-outline btn-lg" style="background:transparent;color:#fff;border-color:rgba(255,255,255,.3)" data-action="go" data-route="register" data-role="customer">'+icon('search',18)+' Post a job</button>'+
+    '</div>'+
+    '<div class="hero-stats">'+
+      '<div class="hs"><b>'+DB.businesses.length+'</b><span>Verified businesses</span></div>'+
+      '<div class="hs"><b>'+DB.jobs.length+'</b><span>Open jobs</span></div>'+
+      '<div class="hs"><b>'+CAT_NAMES.length+'</b><span>Service categories</span></div>'+
+      '<div class="hs"><b>R400</b><span>Per 400 credits</span></div>'+
+    '</div></div></header>'+
+    '<section class="section"><div class="section-inner">'+
+      '<div class="section-title">How Taskora works</div>'+
+      '<p class="section-sub">No endless browsing. A structured job flows through a matching engine and lands with businesses that can actually do the work.</p>'+
+      '<div class="grid g4">'+
+        featureCard('clipboard','1. Customer posts a job','Describe the need, location, timeframe and budget. Costs 30 credits to post.')+
+        featureCard('target','2. Businesses get matched','Eligible businesses see the job and can bid using credits.')+
+        featureCard('chat','3. Direct messaging','Customer and business chat in-app. Bids and quotes all in one thread.')+
+        featureCard('star','4. Rate & build trust','After completion, both sides rate each other.')+
+      '</div></div></section>'+
+    '<section class="section" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="section-inner">'+
+      '<div class="section-title">Top Tier verified businesses</div>'+
+      '<p class="section-sub">Top Tier status requires a verified website, complete street address and company registration certificate. Elite adds proprietor and trade certifications.</p>'+
+      '<div class="grid g-auto">'+top.map(bizCard).join('')+'</div>'+
+      '<div class="center-text mt24"><button class="btn btn-navy" data-action="go" data-route="browse">'+icon('search',16)+' Browse all businesses</button></div>'+
+    '</div></section>'+
+    '<section class="section"><div class="section-inner">'+
+      '<div class="section-title">Credit pricing — one simple batch</div>'+
+      '<p class="section-sub">Every purchase is exactly <b>R400 for 400 credits</b>. Buy as many batches as you need. Credits never expire.</p>'+
+      '<div class="grid g4 mb24">'+
+        pricingCard('1 Batch','400 credits','R400','Post 13 jobs, or bid on 10-25 jobs.')+
+        pricingCard('2 Batches','800 credits','R800','Most popular for small businesses.')+
+        pricingCard('3 Batches','1200 credits','R1200','Ideal for growing service companies.')+
+        pricingCard('5 Batches','2000 credits','R2000','For high-volume contractors.')+
+      '</div>'+
+      '<div class="alert alert-gold">'+icon('alert',17)+'<div><b>Strict R400 batches:</b> To keep verification simple and secure, every purchase is exactly R400 (400 credits). If you need 1200 credits, simply purchase 3 batches of R400 each — you will receive a unique reference for each one.</div></div>'+
+    '</div></section>'+
+    '<footer style="background:var(--navy);color:#fff;padding:52px 34px 34px"><div class="section-inner">'+
+      '<div class="grid g4" style="gap:32px">'+
+        '<div><div class="brand mb14"><div class="brand-mark">'+icon('target',20)+'</div><div class="brand-text"><b>Taskora</b><span>Verified Jobs</span></div></div>'+
+        '<p style="opacity:.6;font-size:13px;line-height:1.7">Connecting verified businesses with customers who are ready to buy now.</p></div>'+
+        '<div><div style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;opacity:.45;font-weight:800;margin-bottom:12px">Platform</div>'+
+          '<div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;opacity:.75"><a data-action="go" data-route="browse" style="cursor:pointer">Browse businesses</a><a data-action="go" data-route="register" data-role="business" style="cursor:pointer">List your business</a><a data-action="go" data-route="login" style="cursor:pointer">Sign in</a></div></div>'+
+        '<div><div style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;opacity:.45;font-weight:800;margin-bottom:12px">Trust</div>'+
+          '<div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;opacity:.75"><span>Verification levels</span><span>Lead quality standards</span><span>Dispute process</span><span>Privacy &amp; POPIA</span></div></div>'+
+        '<div><div style="font-size:11px;letter-spacing:1.6px;text-transform:uppercase;opacity:.45;font-weight:800;margin-bottom:12px">Contact</div>'+
+          '<div style="display:flex;flex-direction:column;gap:9px;font-size:13.5px;opacity:.75"><span>hello@taskora.co.za</span><span>+27 11 000 0000</span><span>Johannesburg, South Africa</span></div></div>'+
+      '</div>'+
+      '<div style="border-top:1px solid rgba(255,255,255,.1);margin-top:34px;padding-top:22px;font-size:12px;opacity:.45;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">'+
+        '<span>© '+new Date().getFullYear()+' Taskora. All rights reserved.</span><span>Payments via Capitec · R400 batches</span></div>'+
+    '</div></footer>';
+}
+function featureCard(ic,t,d){return '<div class="feature"><div class="fi">'+icon(ic,22)+'</div><h4>'+esc(t)+'</h4><p>'+esc(d)+'</p></div>';}
+function pricingCard(t,cr,rd,d){return '<div class="feature"><h4 style="font-size:15px">'+esc(t)+'</h4><div style="font-size:22px;font-weight:900;letter-spacing:-.8px;margin:8px 0 3px;color:var(--navy)">'+esc(cr)+'</div><div style="font-size:13px;font-weight:800;color:var(--teal-d)">'+esc(rd)+'</div><p style="margin-top:10px">'+esc(d)+'</p></div>';}
+
+/* ============ AUTH ============ */
+function renderLogin(){
+  return '<div style="min-height:calc(100vh - 72px);display:grid;place-items:center;padding:40px 20px"><div style="width:100%;max-width:440px">'+
+    '<div class="card card-pad"><div class="center-text mb24">'+
+      '<div class="brand-mark" style="margin:0 auto 14px;width:48px;height:48px;border-radius:14px">'+icon('target',25)+'</div>'+
+      '<h2 style="font-size:23px;font-weight:900;letter-spacing:-.7px">Welcome to Taskora</h2>'+
+      '<p class="muted small mt6">Sign in to your account</p></div>'+
+    '<form data-form="login">'+
+      '<div class="field"><label>Email</label><input class="input" type="email" name="email" placeholder="you@example.com" required></div>'+
+      '<div class="field"><label>Password</label><input class="input" type="password" name="password" placeholder="••••••••" required></div>'+
+      '<button class="btn btn-primary btn-block btn-lg" type="submit">Sign in</button>'+
+    '</form>'+
+    '<div class="divider"></div>'+
+    '<p class="center-text small muted">Don\'t have an account? <span class="link" data-action="go" data-route="register">Create one free</span></p>'+
+    '<div class="alert alert-info mt18" style="flex-direction:column;gap:9px"><div style="font-weight:800;display:flex;gap:8px;align-items:center">'+icon('info',15)+' Demo accounts — click to autofill</div>'+
+    '<div class="flex wrap gap6">'+
+      '<button class="btn btn-sm btn-outline" data-action="demo-login" data-email="admin@taskora.co.za" data-pass="admin123">Admin</button>'+
+      '<button class="btn btn-sm btn-outline" data-action="demo-login" data-email="buyer@example.com" data-pass="buyer123">Customer</button>'+
+      '<button class="btn btn-sm btn-outline" data-action="demo-login" data-email="pro@example.com" data-pass="pro123">Business</button>'+
+    '</div></div></div></div></div>';
+}
+function renderRegister(){
+  const r=S.signupRole||'customer';
+  return '<div style="min-height:calc(100vh - 72px);display:grid;place-items:center;padding:40px 20px"><div style="width:100%;max-width:520px">'+
+    '<div class="card card-pad"><div class="center-text mb24">'+
+      '<div class="brand-mark" style="margin:0 auto 14px;width:48px;height:48px;border-radius:14px">'+icon('target',25)+'</div>'+
+      '<h2 style="font-size:23px;font-weight:900;letter-spacing:-.7px">Create your Taskora account</h2>'+
+      '<p class="muted small mt6">Free to join · Buy credits when ready</p></div>'+
+    '<div class="pill-tabs mb18" style="justify-content:center">'+
+      '<button class="pill-tab '+(r==='customer'?'active':'')+'" data-action="signup-role" data-role="customer">'+icon('user',13)+' I need a service</button>'+
+      '<button class="pill-tab '+(r==='business'?'active':'')+'" data-action="signup-role" data-role="business">'+icon('briefcase',13)+' I offer services</button>'+
+    '</div>'+
+    '<form data-form="register"><input type="hidden" name="role" value="'+r+'">'+
+      '<div class="field"><label>Full name <span class="req">*</span></label><input class="input" name="name" required></div>'+
+      '<div class="row c2"><div class="field"><label>Email <span class="req">*</span></label><input class="input" type="email" name="email" required></div>'+
+      '<div class="field"><label>Mobile <span class="req">*</span></label><input class="input" name="phone" required placeholder="+27 82 555 0111"></div></div>'+
+      '<div class="field"><label>Password <span class="req">*</span></label><input class="input" type="password" name="password" required minlength="6"></div>'+
+      (r==='business'?
+        '<div class="divider"></div>'+
+        '<div class="field"><label>Business name <span class="req">*</span></label><input class="input" name="bizName" required></div>'+
+        '<div class="row c2"><div class="field"><label>Category <span class="req">*</span></label><select class="select" name="bizCat" required>'+CAT_NAMES.map(function(c){return '<option>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+        '<div class="field"><label>City <span class="req">*</span></label><select class="select" name="bizCity" required>'+CITIES.map(function(c){return '<option>'+esc(c)+'</option>';}).join('')+'</select></div></div>'+
+        '<div class="field"><label>Website</label><input class="input" name="bizWeb" placeholder="https://..."></div>'+
+        '<div class="field"><label>Full street address</label><input class="input" name="bizAddr" placeholder="e.g. 142 Rivonia Road, Sandton CBD"></div>'+
+        '<div class="field"><label>Company registration number</label><input class="input" name="bizReg" placeholder="e.g. 2018/445123/07"></div>'
+      :'')+
+      '<label class="check"><input type="checkbox" name="terms" required><span>I agree to the Terms of Service and Privacy Policy, and consent to POPIA-compliant processing.</span></label>'+
+      '<button class="btn btn-primary btn-block btn-lg" type="submit">Create account</button>'+
+    '</form>'+
+    '<div class="divider"></div><p class="center-text small muted">Already registered? <span class="link" data-action="go" data-route="login">Sign in</span></p></div></div></div>';
+}
+
+/* ============ BROWSE ============ */
+function bizCard(b){
+  return '<div class="biz-card" data-action="view-business" data-id="'+b.id+'">'+
+    '<div class="biz-cover"></div><div class="biz-body">'+
+      '<div class="biz-logo">'+esc(initials(b.name))+'</div>'+
+      '<div class="biz-name">'+esc(b.name)+'</div>'+
+      '<div class="biz-cat">'+esc(b.subcategory)+' · '+esc(b.address.city)+'</div>'+
+      '<div class="flex between center mt10">'+starRow(b.rating,b.reviewsCount)+tierBadge(b.verificationLevel)+'</div>'+
+      '<p class="small muted mt10" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1">'+esc(b.description)+'</p>'+
+      '<div class="divider" style="margin:14px 0 12px"></div>'+
+      '<div class="flex between center"><span class="tiny muted"><b class="bold">'+b.completedJobs+'</b> jobs done</span><span class="tiny muted">'+b.responseMinutes+' min response</span></div>'+
+    '</div></div>';
+}
+function renderBrowse(){
+  const f=S.filters;let list=DB.businesses.slice();
+  if(f.q){const q=f.q.toLowerCase();list=list.filter(function(b){return b.name.toLowerCase().indexOf(q)>-1||b.description.toLowerCase().indexOf(q)>-1||b.subcategory.toLowerCase().indexOf(q)>-1;});}
+  if(f.category)list=list.filter(function(b){return b.category===f.category;});
+  if(f.city)list=list.filter(function(b){return b.address.city===f.city;});
+  list.sort(function(a,b){return b.verificationLevel-a.verificationLevel||b.rating-a.rating;});
+  return '<div class="section" style="padding-top:38px"><div class="section-inner">'+
+    '<div class="section-title">Browse verified businesses</div>'+
+    '<p class="section-sub">'+list.length+' businesses match. Sorted by verification and rating.</p>'+
+    '<div class="card card-pad mb18"><div class="row c3">'+
+      '<div class="field" style="margin:0"><label>Search</label><input class="input" data-filter="q" value="'+esc(f.q)+'"></div>'+
+      '<div class="field" style="margin:0"><label>Category</label><select class="select" data-filter="category"><option value="">All categories</option>'+CAT_NAMES.map(function(c){return '<option '+(f.category===c?'selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+      '<div class="field" style="margin:0"><label>City</label><select class="select" data-filter="city"><option value="">All cities</option>'+CITIES.map(function(c){return '<option '+(f.city===c?'selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+    '</div></div>'+
+    (list.length?'<div class="grid g-auto">'+list.map(bizCard).join('')+'</div>':emptyState('search','No businesses match','Try adjusting filters.',''))+
+  '</div></div>';
+}
+function renderBusinessPublic(){
+  const b=getBiz(S.params.id);
+  if(!b)return '<div class="section"><div class="section-inner">'+emptyState('alert','Business not found','','<button class="btn btn-navy" data-action="go" data-route="browse">Back</button>')+'</div></div>';
+  const rv=ratingsForBiz(b.id);
+  return '<div class="section" style="padding-top:38px"><div class="section-inner">'+
+    '<button class="btn btn-ghost btn-sm mb18" data-action="go" data-route="browse">'+icon('arrowLeft',15)+' Back</button>'+
+    '<div class="grid" style="grid-template-columns:2fr 1fr;gap:24px">'+
+      '<div><div class="card mb18"><div class="biz-cover" style="height:110px"></div><div class="card-body">'+
+        '<div class="flex gap14 center wrap"><div class="biz-logo" style="margin-top:-50px">'+esc(initials(b.name))+'</div>'+
+        '<div style="flex:1"><div class="biz-name" style="font-size:20px">'+esc(b.name)+'</div>'+
+        '<div class="biz-cat">'+esc(b.subcategory)+' · '+esc(b.category)+'</div>'+
+        '<div class="flex gap10 center mt6 wrap">'+starRow(b.rating,b.reviewsCount)+tierBadge(b.verificationLevel)+'</div></div></div>'+
+        '<p class="mt14" style="line-height:1.7;color:var(--muted)">'+esc(b.description)+'</p>'+
+        '<div class="grid g3 mt18" style="gap:12px">'+
+          '<div class="stat"><div class="lbl">Jobs done</div><div class="val">'+b.completedJobs+'</div></div>'+
+          '<div class="stat gold"><div class="lbl">Response</div><div class="val">'+b.responseMinutes+'m</div></div>'+
+          '<div class="stat info"><div class="lbl">Rating</div><div class="val">'+b.rating.toFixed(1)+'</div></div>'+
+        '</div></div></div>'+
+        (rv.length?'<div class="card"><div class="card-head"><h3>Reviews</h3></div><div class="card-body">'+
+          rv.map(function(r){const u=getUser(r.raterId);return '<div style="padding:14px 0;border-bottom:1px solid var(--line)"><div class="flex between center"><div class="flex gap10 center"><div class="avatar sm">'+esc(initials(u?u.name:'?'))+'</div><div><b class="small">'+esc(u?u.name:'Customer')+'</b><div class="tiny muted">'+timeAgo(r.createdAt)+'</div></div></div><div class="stars">'+[1,2,3,4,5].map(function(i){return '<span style="color:'+(i<=r.rating?'var(--gold)':'var(--line-2)')+'">'+starIcon(14)+'</span>';}).join('')+'</div></div><p class="mt10" style="font-size:13.5px;color:var(--muted)">'+esc(r.text)+'</p></div>';}).join('')+
+        '</div></div>':'')+
+      '</div>'+
+      '<div><div class="card mb18"><div class="card-head"><h3>Contact</h3></div><div class="card-body">'+
+        '<div class="kv"><span class="k">Phone</span><span class="v">'+esc(b.phone)+'</span></div>'+
+        '<div class="kv"><span class="k">Email</span><span class="v">'+esc(b.email)+'</span></div>'+
+        (b.website?'<div class="kv"><span class="k">Website</span><span class="v"><a href="'+esc(b.website)+'" target="_blank" class="link">'+esc(b.website.replace(/^https?:\/\//,''))+'</a></span></div>':'')+
+        '<div class="kv"><span class="k">Address</span><span class="v">'+esc(b.address.street)+', '+esc(b.address.city)+'</span></div>'+
+        (b.companyReg?'<div class="kv"><span class="k">Company reg.</span><span class="v">'+esc(b.companyReg)+'</span></div>':'')+
+      '</div></div>'+
+      '<div class="card"><div class="card-head"><h3>Verification</h3></div><div class="card-body">'+
+        '<div class="mb10">'+tierBadge(b.verificationLevel)+'</div>'+
+        '<p class="small muted">'+esc(VERIF[b.verificationLevel].n)+'</p>'+
+        (b.certs.length?'<div class="divider"></div><div class="tiny bold mb6">Documents on file</div>'+b.certs.map(function(c){return '<div class="flex gap10 center small mb6">'+icon('file',14)+' <span>'+esc(c.name)+'</span></div>';}).join(''):'')+
+        (b.proprietorCerts.length?'<div class="divider"></div><div class="tiny bold mb6">Certifications</div>'+b.proprietorCerts.map(function(c){return '<div class="flex gap10 center small mb6">'+icon('award',14)+' <span>'+esc(c.name)+'</span></div>';}).join(''):'')+
+      '</div></div></div>'+
+    '</div></div></div>';
+}
+
+/* ============ APP SHELL ============ */
+function renderApp(){
+  const u=S.user;
+  return '<div class="shell">'+
+    '<aside class="sidebar'+(S.sidebarOpen?' open':'')+'">'+
+      '<div class="side-head"><div class="brand"><div class="brand-mark">'+icon('target',20)+'</div><div class="brand-text"><b>Taskora</b><span>Verified Jobs</span></div></div></div>'+
+      '<div class="side-user"><div class="avatar">'+esc(initials(u.name))+'</div><div class="meta"><b>'+esc(u.name)+'</b><span>'+esc(u.role)+'</span></div></div>'+
+      navItems()+
+      '<div class="side-foot">'+
+        (u.role!=='admin'?'<div class="credit-chip" data-action="go" data-route="credits"><div>'+icon('coin',18)+'</div><div><div class="n">'+(u.credits||0)+'</div><div class="l">Credits · '+R((u.credits||0)*CFG.creditValue)+'</div></div></div>':'')+
+        '<button class="nav-item mt10" data-action="logout" style="width:100%">'+icon('logout',18)+' Sign out</button>'+
+      '</div></aside>'+
+    '<main class="main">'+
+      '<header class="topbar">'+
+        '<button class="btn btn-ghost btn-sm mobile-only" data-action="toggle-sidebar">'+icon('menu',18)+'</button>'+
+        '<div><h1>'+esc(pageTitle())+'</h1><div class="sub">'+esc(pageSub())+'</div></div>'+
+        '<div class="top-actions">'+
+          (u.role==='customer'?'<button class="btn btn-primary btn-sm" data-action="post-job">'+icon('plus',15)+' Post a job</button>':'')+
+          (u.role==='business'?'<button class="btn btn-primary btn-sm" data-action="go" data-route="jobs">'+icon('search',15)+' Find jobs</button>':'')+
+          (u.role!=='admin'?'<button class="btn btn-outline btn-sm" data-action="go" data-route="credits">'+icon('coin',15)+' Buy credits</button>':'')+
+        '</div></header>'+
+      '<div class="content">'+pageContent()+'</div>'+
+    '</main></div>';
+}
+function navItems(){
+  const u=S.user;let items=[{r:'dashboard',l:'Dashboard',i:'home'}];
+  if(u.role==='customer'){items.push({r:'my-jobs',l:'My jobs',i:'clipboard'});items.push({r:'jobs',l:'All open jobs',i:'search'});items.push({r:'browse',l:'Browse businesses',i:'briefcase'});items.push({r:'messages',l:'Messages',i:'chat',badge:unreadMessages()});}
+  else if(u.role==='business'){items.push({r:'jobs',l:'Find jobs',i:'search',badge:availableJobsForBiz()});items.push({r:'my-bids',l:'My bids',i:'tag'});items.push({r:'messages',l:'Messages',i:'chat',badge:unreadMessages()});items.push({r:'profile',l:'Business profile',i:'building'});}
+  else if(u.role==='admin'){items.push({r:'admin',l:'Admin console',i:'settings',badge:pendingRefs().length>0?pendingRefs().length:null});items.push({r:'jobs',l:'All jobs',i:'clipboard'});items.push({r:'browse',l:'All businesses',i:'briefcase'});}
+  if(u.role!=='admin')items.push({r:'credits',l:'Credits & payments',i:'coin',gold:true});
+  items.push({r:'ratings',l:'Ratings',i:'star'});
+  let html='<div class="nav"><div class="nav-label">Main</div>';
+  items.forEach(function(it){
+    const active=S.route===it.r?' active':'';
+    html+='<button class="nav-item'+active+'" data-action="go" data-route="'+it.r+'">'+icon(it.i,18)+' '+esc(it.l)+
+      (it.badge?'<span class="nav-badge">'+it.badge+'</span>':'')+
+      (it.gold?'<span class="nav-badge gold">'+(S.user.credits||0)+'</span>':'')+'</button>';
+  });
+  return html+'</div>';
+}
+function unreadMessages(){if(!S.user)return 0;return DB.messages.filter(function(m){return m.toId===S.user.id&&!m.read;}).length;}
+function availableJobsForBiz(){const b=myBiz();if(!b)return 0;const bidJobIds=DB.bids.filter(function(x){return x.businessId===b.id;}).map(function(x){return x.jobId;});return DB.jobs.filter(function(j){return j.status==='open'&&bidJobIds.indexOf(j.id)===-1&&j.category===b.category;}).length;}
+function pageTitle(){const m={dashboard:'Dashboard',jobs:'Jobs','my-jobs':'My jobs','my-bids':'My bids',browse:'Businesses',messages:'Messages',credits:'Credits & payments',profile:'Business profile',admin:'Admin console',ratings:'Ratings'};return m[S.route]||'Dashboard';}
+function pageSub(){const u=S.user;if(S.route==='dashboard')return 'Welcome back, '+u.name.split(' ')[0];if(S.route==='jobs')return u.role==='business'?'Jobs that match your category':'All open jobs';if(S.route==='my-jobs')return 'Jobs you have posted';if(S.route==='my-bids')return 'Bids you have submitted';if(S.route==='messages')return 'Direct conversations';if(S.route==='credits')return 'Buy credits in R400 batches · track payments';if(S.route==='admin')return 'Verify payments & load credits';return '';}
+
+function pageContent(){
+  const r=S.route;
+  if(r==='dashboard')return pageDashboard();
+  if(r==='jobs')return pageJobs();
+  if(r==='my-jobs')return pageMyJobs();
+  if(r==='my-bids')return pageMyBids();
+  if(r==='browse')return pageBrowseInApp();
+  if(r==='messages')return pageMessages();
+  if(r==='credits')return pageCredits();
+  if(r==='profile')return pageProfile();
+  if(r==='admin')return pageAdmin();
+  if(r==='ratings')return pageRatings();
+  return pageDashboard();
+}
+
+/* ============ DASHBOARD ============ */
+function statCard(label,val,ic,cls){return '<div class="stat '+(cls||'')+'"><div class="lbl">'+icon(ic,14)+' '+esc(label)+'</div><div class="val">'+esc(val)+'</div></div>';}
+function pageDashboard(){
+  const u=S.user;
+  if(u.role==='customer'){
+    const myJobs=jobsForCustomer(u.id);const open=myJobs.filter(function(j){return j.status==='open';}).length;
+    const bids=DB.bids.filter(function(b){return myJobs.some(function(j){return j.id===b.jobId;});}).length;
+    return '<div class="grid g4 mb24">'+statCard('My jobs',myJobs.length,'clipboard','')+statCard('Open jobs',open,'search','info')+statCard('Bids received',bids,'tag','gold')+statCard('Credit balance',u.credits,'coin','purple')+'</div>'+
+      '<div class="card mb18"><div class="card-head"><h3>Recent jobs</h3><div class="right"><button class="btn btn-primary btn-sm" data-action="post-job">'+icon('plus',14)+' Post a job</button></div></div><div class="card-body">'+
+      (myJobs.length?myJobs.slice(0,5).map(function(j){return jobRowForCustomer(j);}).join(''):emptyState('clipboard','No jobs yet','Post your first job to receive bids.','<button class="btn btn-primary" data-action="post-job">'+icon('plus',15)+' Post a job</button>'))+'</div></div>'+
+      '<div class="card"><div class="card-head"><h3>Top rated businesses</h3></div><div class="card-body"><div class="grid g-auto">'+DB.businesses.slice().sort(function(a,b){return b.rating-a.rating;}).slice(0,3).map(bizCard).join('')+'</div></div></div>';
+  }
+  if(u.role==='business'){
+    const b=myBiz();if(!b)return emptyState('alert','Business profile missing','','');
+    const bids=bidsForBiz(b.id);const won=bids.filter(function(x){return x.status==='accepted';}).length;
+    return '<div class="grid g4 mb24">'+statCard('Credit balance',u.credits,'coin','gold')+statCard('My bids',bids.length,'tag','')+statCard('Won jobs',won,'award','info')+statCard('Rating',b.rating.toFixed(1),'star','purple')+'</div>'+
+      '<div class="card mb18"><div class="card-head"><h3>Jobs matching your category</h3><div class="right"><button class="btn btn-primary btn-sm" data-action="go" data-route="jobs">'+icon('search',14)+' View all</button></div></div><div class="card-body">'+matchedJobsPreview(b)+'</div></div>'+
+      '<div class="grid g2">'+
+        '<div class="card"><div class="card-head"><h3>Recent bids</h3></div><div class="card-body">'+(bids.length?bids.slice(0,4).map(function(bd){const j=getJob(bd.jobId);return '<div class="kv"><span class="k">'+esc(j?j.title:'Job')+'</span><span class="v">'+R(bd.amount)+' '+statusBadge(bd.status)+'</span></div>';}).join(''):emptyState('tag','No bids yet','Find jobs and submit your first bid.',''))+'</div></div>'+
+        '<div class="card"><div class="card-head"><h3>Verification</h3></div><div class="card-body"><div class="mb10">'+tierBadge(b.verificationLevel)+'</div><p class="small muted mb14">'+esc(VERIF[b.verificationLevel].n)+'</p><div class="progress mb10"><i style="width:'+((b.verificationLevel+1)/5*100)+'%"></i></div><button class="btn btn-outline btn-sm btn-block" data-action="go" data-route="profile">Manage verification</button></div></div>'+
+      '</div>';
+  }
+  if(u.role==='admin'){
+    const pend=pendingRefs().length;
+    const verified=DB.paymentRefs.filter(function(p){return p.status==='verified';}).length;
+    const totalCredits=DB.users.reduce(function(s,x){return s+(x.credits||0);},0);
+    const revenue=verified*CFG.fixedBatchPrice;
+    return '<div class="grid g4 mb24">'+statCard('Users',DB.users.length,'users','')+statCard('Pending payments',pend,'clock',pend>0?'red':'')+statCard('Credits issued',totalCredits,'coin','gold')+statCard('Revenue verified',R(revenue),'wallet','info')+'</div>'+
+      (pend>0?'<div class="alert alert-warn mb18">'+icon('alert',17)+'<div><b>'+pend+' payment'+(pend>1?'s':'')+' awaiting verification.</b> Open the admin console to confirm and load credits automatically.</div></div>':'')+
+      '<div class="card"><div class="card-head"><h3>Payment verification queue</h3><div class="right"><button class="btn btn-navy btn-sm" data-action="go" data-route="admin">Open admin console</button></div></div><div class="card-body">'+adminPaymentsTable(true)+'</div></div>';
+  }
+  return '';
+}
+function matchedJobsPreview(b){
+  const bidJobIds=DB.bids.filter(function(x){return x.businessId===b.id;}).map(function(x){return x.jobId;});
+  const jobs=DB.jobs.filter(function(j){return j.status==='open'&&bidJobIds.indexOf(j.id)===-1&&j.category===b.category;}).slice(0,3);
+  if(!jobs.length)return emptyState('search','No matching jobs right now','We will notify you when a job in your category is posted.','');
+  return jobs.map(function(j){return jobRowForBusiness(j,b);}).join('');
+}
+function jobRowForCustomer(j){
+  const bids=bidsForJob(j.id);
+  return '<div class="flex between center wrap gap10" style="padding:14px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:200px"><div class="bold">'+esc(j.title)+'</div><div class="tiny muted mt6">'+esc(j.subcategory)+' · '+esc(j.location)+' · '+timeAgo(j.createdAt)+'</div></div><div class="flex gap10 center"><span class="badge b-navy">'+bids.length+' bids</span>'+statusBadge(j.status)+'<button class="btn btn-sm btn-outline" data-action="view-job" data-id="'+j.id+'">View</button></div></div>';
+}
+function jobRowForBusiness(j,b){
+  const cost=tierBidCost(j.tier);
+  return '<div class="flex between center wrap gap10" style="padding:14px 0;border-bottom:1px solid var(--line)"><div style="flex:1;min-width:200px"><div class="bold">'+esc(j.title)+'</div><div class="tiny muted mt6">'+esc(j.subcategory)+' · '+esc(j.location)+' · '+timeAgo(j.createdAt)+'</div><div class="meta-row"><span class="badge b-gold">'+tierName(j.tier)+' · '+cost.min+'-'+cost.max+' credits</span><span class="badge b-navy">'+esc(j.budget)+'</span></div></div><button class="btn btn-sm btn-primary" data-action="view-job" data-id="'+j.id+'">View &amp; bid</button></div>';
+}
+
+/* ============ JOBS ============ */
+function pageJobs(){
+  const u=S.user;
+  if(u.role==='business'){
+    const b=myBiz();if(!b)return emptyState('alert','No business profile','','');
+    const bidJobIds=DB.bids.filter(function(x){return x.businessId===b.id;}).map(function(x){return x.jobId;});
+    const jobs=DB.jobs.filter(function(j){return j.status==='open'&&bidJobIds.indexOf(j.id)===-1&&j.category===b.category;});
+    return '<div class="grid g-auto">'+(jobs.length?jobs.map(function(j){return jobCardForBiz(j,b);}).join(''):emptyState('search','No matching jobs','We will notify you when a job in your category is posted.',''))+'</div>';
+  }
+  const jobs=DB.jobs.slice().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+  return '<div class="grid g-auto">'+jobs.map(function(j){return jobCardForCustomer(j);}).join('')+'</div>';
+}
+function jobCardForCustomer(j){
+  const bids=bidsForJob(j.id);
+  return '<div class="job-card" data-action="view-job" data-id="'+j.id+'"><div class="flex between center wrap gap10 mb10">'+statusBadge(j.status)+'<span class="badge b-navy">'+tierName(j.tier)+'</span></div><div class="job-title">'+esc(j.title)+'</div><div class="job-desc">'+esc(j.description)+'</div><div class="meta-row"><span class="meta-pill">'+icon('pin',12)+' '+esc(j.location)+'</span><span class="meta-pill">'+icon('tag',12)+' '+esc(j.subcategory)+'</span><span class="meta-pill">'+icon('coin',12)+' '+esc(j.budget)+'</span></div><div class="divider" style="margin:14px 0 12px"></div><div class="flex between center"><span class="tiny muted">'+timeAgo(j.createdAt)+'</span><span class="badge b-teal">'+bids.length+' bids</span></div></div>';
+}
+function jobCardForBiz(j,b){
+  const cost=tierBidCost(j.tier);
+  return '<div class="job-card" data-action="view-job" data-id="'+j.id+'"><div class="flex between center wrap gap10 mb10"><span class="badge b-gold">'+tierName(j.tier)+'</span><span class="badge b-navy">'+esc(j.budget)+'</span></div><div class="job-title">'+esc(j.title)+'</div><div class="job-desc">'+esc(j.description)+'</div><div class="meta-row"><span class="meta-pill">'+icon('pin',12)+' '+esc(j.location)+'</span><span class="meta-pill">'+icon('tag',12)+' '+esc(j.subcategory)+'</span></div><div class="alert alert-gold mt14" style="font-size:12.5px;padding:9px 12px">'+icon('coin',14)+'<div><b>Bid cost:</b> '+cost.min+'-'+cost.max+' credits ('+R(cost.min*CFG.creditValue)+'-'+R(cost.max*CFG.creditValue)+')</div></div><div class="flex between center mt14"><span class="tiny muted">'+timeAgo(j.createdAt)+'</span><button class="btn btn-sm btn-primary" data-action="view-job" data-id="'+j.id+'">View &amp; bid</button></div></div>';
+}
+function pageMyJobs(){
+  const u=S.user;const jobs=jobsForCustomer(u.id);
+  if(!jobs.length)return emptyState('clipboard','No jobs yet','Post your first job to receive bids.','<button class="btn btn-primary" data-action="post-job">'+icon('plus',15)+' Post a job</button>');
+  return '<div class="grid g-auto">'+jobs.map(function(j){return jobCardForCustomer(j);}).join('')+'</div>';
+}
+function pageMyBids(){
+  const b=myBiz();if(!b)return emptyState('alert','No business profile','','');
+  const bids=bidsForBiz(b.id);
+  if(!bids.length)return emptyState('tag','No bids yet','Browse open jobs and submit your first bid.','<button class="btn btn-primary" data-action="go" data-route="jobs">'+icon('search',15)+' Find jobs</button>');
+  return '<div class="card"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Job</th><th>My bid</th><th>Credits spent</th><th>Status</th><th></th></tr></thead><tbody>'+
+    bids.map(function(bd){const j=getJob(bd.jobId);return '<tr><td><b>'+esc(j?j.title:'—')+'</b><div class="tiny muted">'+esc(j?j.location:'')+'</div></td><td><b>'+R(bd.amount)+'</b><div class="tiny muted">'+bd.days+' day(s)</div></td><td>'+bd.creditsSpent+'</td><td>'+statusBadge(bd.status)+'</td><td><button class="btn btn-sm btn-outline" data-action="view-job" data-id="'+bd.jobId+'">View</button></td></tr>';}).join('')+
+  '</tbody></table></div></div>';
+}
+function pageBrowseInApp(){
+  const f=S.filters;let list=DB.businesses.slice();
+  if(f.q){const q=f.q.toLowerCase();list=list.filter(function(b){return b.name.toLowerCase().indexOf(q)>-1||b.description.toLowerCase().indexOf(q)>-1||b.subcategory.toLowerCase().indexOf(q)>-1;});}
+  if(f.category)list=list.filter(function(b){return b.category===f.category;});
+  if(f.city)list=list.filter(function(b){return b.address.city===f.city;});
+  list.sort(function(a,b){return b.verificationLevel-a.verificationLevel||b.rating-a.rating;});
+  return '<div class="card card-pad mb18"><div class="row c3">'+
+    '<div class="field" style="margin:0"><label>Search</label><input class="input" data-filter="q" value="'+esc(f.q)+'"></div>'+
+    '<div class="field" style="margin:0"><label>Category</label><select class="select" data-filter="category"><option value="">All</option>'+CAT_NAMES.map(function(c){return '<option '+(f.category===c?'selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+    '<div class="field" style="margin:0"><label>City</label><select class="select" data-filter="city"><option value="">All</option>'+CITIES.map(function(c){return '<option '+(f.city===c?'selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+  '</div></div>'+(list.length?'<div class="grid g-auto">'+list.map(bizCard).join('')+'</div>':emptyState('search','No businesses match','',''));
+}
+
+/* ============ MESSAGES ============ */
+function pageMessages(){
+  const u=S.user;
+  if(S.chatJobId&&S.chatOtherId)return renderChat();
+  const convs={};
+  DB.messages.forEach(function(m){
+    if(m.fromId!==u.id&&m.toId!==u.id)return;
+    const other=m.fromId===u.id?m.toId:m.fromId;
+    const key=m.jobId+'|'+other;
+    if(!convs[key])convs[key]={jobId:m.jobId,otherId:other,last:m,unread:0};
+    if(new Date(m.createdAt)>new Date(convs[key].last.createdAt))convs[key].last=m;
+    if(m.toId===u.id&&!m.read)convs[key].unread++;
+  });
+  const list=Object.keys(convs).map(function(k){return convs[k];}).sort(function(a,b){return new Date(b.last.createdAt)-new Date(a.last.createdAt);});
+  if(!list.length)return emptyState('chat','No messages yet','Conversations start when you bid on a job or a business contacts you.','');
+  return '<div class="card"><div class="card-head"><h3>Conversations</h3><div class="right"><span class="badge b-navy">'+list.length+'</span></div></div><div class="card-body" style="padding:8px">'+
+    list.map(function(c){
+      const j=getJob(c.jobId);const other=getUser(c.otherId);
+      return '<button style="width:100%;text-align:left;padding:14px;border-radius:12px;transition:.15s;display:flex;gap:14px;align-items:center" data-action="open-chat" data-job="'+c.jobId+'" data-other="'+c.otherId+'" onmouseover="this.style.background=\'var(--surface-2)\'" onmouseout="this.style.background=\'\'">'+
+        '<div class="avatar">'+esc(initials(other?other.name:'?'))+'</div>'+
+        '<div style="flex:1;min-width:0"><div class="flex between center"><b class="small">'+esc(other?other.name:'User')+'</b><span class="tiny muted">'+timeAgo(c.last.createdAt)+'</span></div>'+
+        '<div class="tiny muted" style="margin-top:3px">'+esc(j?j.title:'Job')+'</div>'+
+        '<div class="small muted" style="margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(c.last.body)+'</div></div>'+
+        (c.unread?'<span class="nav-badge">'+c.unread+'</span>':'')+
+      '</button>';
+    }).join('')+'</div></div>';
+}
+function renderChat(){
+  const u=S.user;const job=getJob(S.chatJobId);const other=getUser(S.chatOtherId);
+  const msgs=DB.messages.filter(function(m){return m.jobId===S.chatJobId&&((m.fromId===u.id&&m.toId===S.chatOtherId)||(m.fromId===S.chatOtherId&&m.toId===u.id));}).sort(function(a,b){return new Date(a.createdAt)-new Date(b.createdAt);});
+  msgs.forEach(function(m){if(m.toId===u.id)m.read=true;});saveDB();
+  return '<div class="card"><div class="card-head">'+
+    '<button class="btn btn-ghost btn-sm" data-action="close-chat">'+icon('arrowLeft',15)+'</button>'+
+    '<div class="avatar sm">'+esc(initials(other?other.name:'?'))+'</div>'+
+    '<div><h3 style="font-size:15px">'+esc(other?other.name:'User')+'</h3><p>'+esc(job?job.title:'Job')+'</p></div>'+
+  '</div>'+
+  '<div class="card-body" id="chat-scroll" style="max-height:480px;overflow-y:auto;background:var(--surface-2)">'+
+    (msgs.length?msgs.map(function(m){return '<div class="msg '+(m.fromId===u.id?'me':'them')+'">'+esc(m.body)+'<span class="t">'+timeAgo(m.createdAt)+'</span></div>';}).join(''):'<p class="center-text muted small" style="padding:40px">No messages yet. Start the conversation below.</p>')+
+  '</div>'+
+  '<div style="padding:14px 22px;border-top:1px solid var(--line);display:flex;gap:10px">'+
+    '<input class="input" id="chat-input" placeholder="Type a message..." style="flex:1">'+
+    '<button class="btn btn-primary" data-action="send-msg">'+icon('send',15)+' Send</button>'+
+  '</div></div>';
+}
+
+/* ============ CREDITS — R400 FIXED BATCH ============ */
+function pageCredits(){
+  const u=S.user;
+  const myRefs=paymentRefsForUser(u.id).slice().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+  const myTx=DB.transactions.filter(function(t){return t.userId===u.id;}).slice().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+  const pendingCount=myRefs.filter(function(r){return r.status==='pending';}).length;
+
+  return '<div class="grid mb24" style="grid-template-columns:2fr 1fr;gap:20px">'+
+    '<div class="card"><div class="card-head"><h3>'+icon('coin',18)+' Buy credits</h3><p>Fixed batch: 400 credits for R400</p></div><div class="card-body">'+
+      '<div class="alert alert-gold mb18">'+icon('info',17)+'<div><b>Fixed R400 batches only.</b> Every purchase is exactly <b>400 credits for R400</b>. If you need more credits, buy multiple batches — each receives its own unique payment reference.</div></div>'+
+      '<div style="background:linear-gradient(135deg,var(--teal-l),#D6F5EA);border:2px solid var(--teal);border-radius:var(--r-lg);padding:24px;text-align:center;margin-bottom:18px">'+
+        '<div style="font-size:11.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal-d)">One batch</div>'+
+        '<div class="amount-big" style="color:var(--navy)">400<small>credits</small></div>'+
+        '<div style="font-size:22px;font-weight:900;color:var(--teal-d);letter-spacing:-.5px">R400.00</div>'+
+        '<div class="tiny muted mt6">1 credit = R2 · Credits never expire</div>'+
+      '</div>'+
+      '<button class="btn btn-gold btn-lg btn-block" data-action="generate-ref">'+icon('qr',18)+' Generate payment reference for R400</button>'+
+      '<p class="tiny muted center-text mt10">You will receive a unique reference like <b>TSK400-20260109-A7B3C9</b>. Pay via Capitec and credits will be loaded after verification.</p>'+
+    '</div></div>'+
+    '<div class="card"><div class="card-head"><h3>Your balance</h3></div><div class="card-body center-text">'+
+      '<div class="credit-big">'+u.credits+'</div>'+
+      '<div class="muted small mt6">credits · worth '+R(u.credits*CFG.creditValue)+'</div>'+
+      '<div class="divider"></div>'+
+      '<div class="kv"><span class="k">Post a job</span><span class="v">'+CFG.postJobCost+' credits</span></div>'+
+      '<div class="kv"><span class="k">Quick Fix bid</span><span class="v">15-25 credits</span></div>'+
+      '<div class="kv"><span class="k">Standard bid</span><span class="v">30-60 credits</span></div>'+
+      '<div class="kv"><span class="k">Large bid</span><span class="v">80-120 credits</span></div>'+
+      (pendingCount>0?'<div class="divider"></div><div class="alert alert-warn" style="font-size:12px;padding:10px 12px;text-align:left">'+icon('clock',14)+'<div><b>'+pendingCount+' pending payment'+(pendingCount>1?'s':'')+'.</b> Awaiting verification.</div></div>':'')+
+    '</div></div>'+
+  '</div>'+
+  '<div class="card mb18"><div class="card-head"><h3>Payment references</h3><p>Use the exact reference when paying via Capitec</p></div><div class="card-body">'+
+    (myRefs.length?myRefs.map(function(r){return renderRefCard(r);}).join(''):emptyState('wallet','No payment references yet','Generate one when you are ready to buy credits.','<button class="btn btn-gold" data-action="generate-ref">'+icon('qr',15)+' Generate reference</button>'))+
+  '</div></div>'+
+  '<div class="card"><div class="card-head"><h3>Transaction history</h3></div><div class="card-body">'+
+    (myTx.length?'<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Date</th><th>Description</th><th>Credits</th><th>Amount</th><th>Status</th></tr></thead><tbody>'+
+      myTx.map(function(t){
+        return '<tr><td class="small">'+fmtDate(t.createdAt)+'</td><td class="small">'+esc(t.description)+'</td><td><b>'+(t.credits>0?'+':'')+t.credits+'</b></td><td>'+R(t.amount)+'</td><td>'+statusBadge(t.status)+'</td></tr>';
+      }).join('')+'</tbody></table></div>':emptyState('clipboard','No transactions yet','',''))+
+  '</div></div>';
+}
+
+function renderRefCard(r){
+  const isPending=r.status==='pending';
+  const isVerified=r.status==='verified';
+  return '<div style="padding:18px;border:2px solid '+(isPending?'var(--gold)':isVerified?'var(--teal)':'var(--line)')+';border-radius:var(--r);margin-bottom:14px;background:'+(isPending?'var(--gold-l)':isVerified?'var(--teal-l)':'var(--surface)')+'">'+
+    '<div class="flex between center wrap gap10 mb14">'+
+      '<div class="flex gap10 center">'+
+        '<div style="width:38px;height:38px;border-radius:11px;background:'+(isPending?'var(--gold)':isVerified?'var(--teal)':'var(--muted)')+';display:grid;place-items:center;color:'+(isPending?'#3A2600':'#04231A')+'">'+icon(isVerified?'check':'clock',18)+'</div>'+
+        '<div><div class="bold">'+R(r.amount)+' · '+r.credits+' credits</div><div class="tiny muted">'+timeAgo(r.createdAt)+'</div></div>'+
+      '</div>'+
+      statusBadge(r.status)+
+    '</div>'+
+    '<div class="ref-box">'+esc(r.reference)+'<button class="copy-btn" data-action="copy-ref" data-ref="'+esc(r.reference)+'">'+icon('copy',11)+' Copy</button></div>'+
+    (isPending?
+      '<div class="alert alert-warn mt14" style="font-size:12.5px">'+icon('clock',14)+'<div><b>Awaiting verification.</b> '+(r.userMarkedPaid?'You marked this as paid. Admin will verify and load your credits shortly.':'Pay R400 via Capitec using the reference above, then click "I have paid" below.')+'</div></div>'+
+      (r.userMarkedPaid?
+        '<div class="alert alert-info mt10" style="font-size:12.5px">'+icon('info',14)+'<div>Admin has been notified. Credits are typically loaded within minutes.</div></div>'
+        :'<button class="btn btn-navy btn-block mt14" data-action="mark-paid" data-id="'+r.id+'">'+icon('check',15)+' I have paid R400</button>')
+      :'')+
+    (isVerified?'<div class="alert alert-ok mt14" style="font-size:12.5px">'+icon('check',14)+'<div><b>Credits loaded!</b> '+r.credits+' credits added to your balance'+(r.verifiedAt?' on '+fmtDate(r.verifiedAt):'')+'.</div></div>':'')+
+  '</div>';
+}
+
+/* ============ PAYMENT MODAL (QR + REF) ============ */
+function showPaymentModal(ref){
+  const html=
+    '<div class="modal-head"><div><h3>'+icon('qr',20)+' Pay R400 via Capitec</h3><p>Scan the QR code or use the bank details below</p></div><button class="x-btn" data-action="close-modal">'+icon('x',18)+'</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="step-badges">'+
+        '<span class="step-badge active">'+icon('check',11)+' Step 1: Reference</span>'+
+        '<span class="step-badge">'+icon('qr',11)+' Step 2: Pay R400</span>'+
+        '<span class="step-badge">'+icon('check',11)+' Step 3: Confirm</span>'+
+      '</div>'+
+      '<div class="alert alert-danger mb18">'+icon('alert',17)+'<div><b>Pay exactly R400.00 — no more, no less.</b> Do not change the amount. Do not change the reference. Any other amount will delay or reject your credit load.</div></div>'+
+      '<div class="payment-grid">'+
+        '<div>'+
+          '<div class="qr-card">'+
+            '<img src="'+CFG.qrImagePath+'" alt="Capitec Scan to Pay QR code" onerror="this.style.display=\'none\';this.parentNode.insertAdjacentHTML(\'afterbegin\',\'<div style=\\\'padding:40px;color:var(--muted);text-align:center\\\'><b>QR image not found</b><br><span class=\\\'tiny\\\'>Save your QR code as <b>capitec-qr.png</b> next to index.html</span></div>\')">'+
+            '<div class="scan-label">Scan to pay</div>'+
+            '<div class="qr-sub">Capitec Bank · R400.00</div>'+
+          '</div>'+
+          '<div class="alert alert-info" style="font-size:12px">'+icon('info',14)+'<div>Open your Capitec app → <b>Scan to Pay</b> → scan the QR code above. Then enter the reference below.</div></div>'+
+        '</div>'+
+        '<div>'+
+          '<div class="tiny bold mb10" style="letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">Your payment reference</div>'+
+          '<div class="ref-box mb18">'+esc(ref.reference)+'<button class="copy-btn" data-action="copy-ref" data-ref="'+esc(ref.reference)+'">'+icon('copy',11)+' Copy</button></div>'+
+          '<div class="amount-big" style="text-align:left">R400.00<small>fixed amount</small></div>'+
+          '<div class="divider"></div>'+
+          '<div class="tiny bold mb10" style="letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">Bank details</div>'+
+          '<div class="bank-detail"><span class="lbl">Account holder</span><span class="val">'+esc(CFG.bank.holder)+'</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Bank</span><span class="val">'+esc(CFG.bank.bank)+'</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Account number</span><span class="val">'+esc(CFG.bank.accountNumber)+'</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Branch code</span><span class="val">'+esc(CFG.bank.branchCode)+'</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Account type</span><span class="val">'+esc(CFG.bank.accountType)+'</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Amount</span><span class="val" style="color:var(--teal-d)">R400.00</span></div>'+
+          '<div class="bank-detail"><span class="lbl">Reference</span><span class="val" style="color:var(--red)">'+esc(ref.reference)+'</span></div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="alert alert-warn mt18">'+icon('alert',16)+'<div><b>Important:</b> Always use the exact reference <b>'+esc(ref.reference)+'</b> in the payment description. Without the correct reference, we cannot match your payment to your account and your credits will not be loaded.</div></div>'+
+    '</div>'+
+    '<div class="modal-foot">'+
+      '<button class="btn btn-ghost" data-action="close-modal">Close</button>'+
+      '<button class="btn btn-primary" data-action="mark-paid" data-id="'+ref.id+'">'+icon('check',15)+' I have paid R400</button>'+
+    '</div>';
+  openModal(html,true);
+}
+
+/* ============ PROFILE ============ */
+function pageProfile(){
+  const b=myBiz();if(!b)return emptyState('alert','No business profile','','');
+  return '<div class="grid g2">'+
+    '<div class="card"><div class="card-head"><h3>Business details</h3></div><div class="card-body">'+
+      '<div class="field"><label>Business name</label><input class="input" value="'+esc(b.name)+'" disabled></div>'+
+      '<div class="field"><label>Category</label><input class="input" value="'+esc(b.category)+'" disabled></div>'+
+      '<div class="field"><label>Subcategory</label><input class="input" value="'+esc(b.subcategory)+'" disabled></div>'+
+      '<div class="field"><label>Website</label><input class="input" value="'+esc(b.website||'')+'" disabled></div>'+
+      '<div class="field"><label>Address</label><input class="input" value="'+esc(b.address.street+', '+b.address.suburb+', '+b.address.city)+'" disabled></div>'+
+      '<div class="field"><label>Company registration</label><input class="input" value="'+esc(b.companyReg||'')+'" disabled></div>'+
+      '<p class="hint">Contact admin to update business details.</p>'+
+    '</div></div>'+
+    '<div class="card"><div class="card-head"><h3>Verification status</h3></div><div class="card-body">'+
+      '<div class="mb14">'+tierBadge(b.verificationLevel)+'</div>'+
+      '<p class="small muted mb18">'+esc(VERIF[b.verificationLevel].n)+'</p>'+
+      '<div class="tiny bold mb10">Requirements per level</div>'+
+      '<div style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="flex between center"><span class="small bold">Level 1 — Contact</span>'+(b.verificationLevel>=1?'<span class="badge b-ok">'+icon('check',11)+' Done</span>':'<span class="badge b-grey">Required</span>')+'</div><div class="tiny muted mt6">Email and phone confirmed</div></div>'+
+      '<div style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="flex between center"><span class="small bold">Level 2 — Verified Business</span>'+(b.verificationLevel>=2?'<span class="badge b-ok">'+icon('check',11)+' Done</span>':'<span class="badge b-grey">Required</span>')+'</div><div class="tiny muted mt6">Company registration certificate + full street address</div></div>'+
+      '<div style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="flex between center"><span class="small bold">Level 3 — Top Tier</span>'+(b.verificationLevel>=3?'<span class="badge b-ok">'+icon('check',11)+' Done</span>':'<span class="badge b-grey">Required</span>')+'</div><div class="tiny muted mt6">+ Verified business website</div></div>'+
+      '<div style="padding:10px 0"><div class="flex between center"><span class="small bold">Level 4 — Elite</span>'+(b.verificationLevel>=4?'<span class="badge b-ok">'+icon('check',11)+' Done</span>':'<span class="badge b-grey">Required</span>')+'</div><div class="tiny muted mt6">+ Proprietor / trade certifications</div></div>'+
+    '</div></div>'+
+  '</div>';
+}
+
+/* ============ RATINGS ============ */
+function pageRatings(){
+  const u=S.user;
+  if(u.role==='business'){
+    const b=myBiz();if(!b)return emptyState('alert','No business profile','','');
+    const rv=ratingsForBiz(b.id);
+    return '<div class="grid g4 mb24">'+statCard('Average rating',b.rating.toFixed(1),'star','gold')+statCard('Total reviews',rv.length,'chat','')+statCard('Jobs completed',b.completedJobs,'award','info')+'</div>'+
+      '<div class="card"><div class="card-head"><h3>All reviews</h3></div><div class="card-body">'+
+      (rv.length?rv.map(function(r){const cu=getUser(r.raterId);return '<div style="padding:14px 0;border-bottom:1px solid var(--line)"><div class="flex between center"><div class="flex gap10 center"><div class="avatar sm">'+esc(initials(cu?cu.name:'?'))+'</div><div><b class="small">'+esc(cu?cu.name:'Customer')+'</b><div class="tiny muted">'+timeAgo(r.createdAt)+'</div></div></div><div class="stars">'+[1,2,3,4,5].map(function(i){return '<span style="color:'+(i<=r.rating?'var(--gold)':'var(--line-2)')+'">'+starIcon(14)+'</span>';}).join('')+'</div></div><p class="mt10" style="font-size:13.5px;color:var(--muted)">'+esc(r.text)+'</p></div>';}).join(''):emptyState('star','No reviews yet','Complete jobs to receive ratings from customers.',''))+
+      '</div></div>';
+  }
+  const myRatings=DB.ratings.filter(function(r){return r.raterId===u.id;});
+  const completedJobs=DB.jobs.filter(function(j){return j.customerId===u.id&&j.status==='completed';});
+  const pendingRating=completedJobs.filter(function(j){return !DB.ratings.find(function(r){return r.jobId===j.id&&r.raterId===u.id;});});
+  return (pendingRating.length?'<div class="alert alert-warn mb18">'+icon('star',16)+'<div><b>'+pendingRating.length+' completed job'+(pendingRating.length>1?'s':'')+' awaiting your rating.</b> Rate the businesses to build trust.</div></div>':'')+
+    '<div class="card"><div class="card-head"><h3>Ratings you have given</h3></div><div class="card-body">'+
+    (myRatings.length?myRatings.map(function(r){const biz=getBiz(r.businessId);return '<div style="padding:14px 0;border-bottom:1px solid var(--line)"><div class="flex between center wrap gap10"><div><b>'+esc(biz?biz.name:'Business')+'</b><div class="tiny muted">'+timeAgo(r.createdAt)+'</div></div><div class="stars">'+[1,2,3,4,5].map(function(i){return '<span style="color:'+(i<=r.rating?'var(--gold)':'var(--line-2)')+'">'+starIcon(14)+'</span>';}).join('')+'</div></div><p class="mt10" style="font-size:13.5px;color:var(--muted)">'+esc(r.text)+'</p></div>';}).join(''):emptyState('star','No ratings yet','Complete a job and rate the business.',''))+
+    '</div></div>';
+}
+
+/* ============ ADMIN ============ */
+function pageAdmin(){
+  const tab=S.adminTab||'payments';
+  const pend=pendingRefs();
+  const allRefs=DB.paymentRefs.slice().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);});
+  const totalRevenue=DB.paymentRefs.filter(function(p){return p.status==='verified';}).length*CFG.fixedBatchPrice;
+  const tabs=[
+    {id:'payments',l:'Payment verification',badge:pend.length},
+    {id:'users',l:'Users'},
+    {id:'jobs',l:'Jobs'},
+    {id:'transactions',l:'Transactions'}
+  ];
+  return '<div class="grid g4 mb24">'+
+      statCard('Pending',pend.length,'clock',pend.length>0?'red':'')+
+      statCard('Verified payments',DB.paymentRefs.filter(function(p){return p.status==='verified';}).length,'check','')+
+      statCard('Total revenue',R(totalRevenue),'wallet','info')+
+      statCard('Credits issued',DB.transactions.reduce(function(s,t){return s+(t.credits>0?t.credits:0);},0),'coin','gold')+
+    '</div>'+
+    '<div class="pill-tabs mb18">'+tabs.map(function(t){
+      return '<button class="pill-tab '+(tab===t.id?'active':'')+'" data-action="admin-tab" data-tab="'+t.id+'">'+esc(t.l)+(t.badge?' <span class="badge b-red" style="margin-left:6px">'+t.badge+'</span>':'')+'</button>';
+    }).join('')+'</div>'+
+    (tab==='payments'?'<div class="card"><div class="card-head"><h3>Payment verification queue</h3><p>Verify payments to automatically load credits</p></div><div class="card-body">'+adminPaymentsTable()+'</div></div>'
+    :tab==='users'?'<div class="card"><div class="card-head"><h3>All users</h3></div><div class="card-body"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Credits</th><th>Joined</th></tr></thead><tbody>'+DB.users.map(function(u){return '<tr><td><b>'+esc(u.name)+'</b></td><td class="small">'+esc(u.email)+'</td><td><span class="badge b-navy">'+esc(u.role)+'</span></td><td><b>'+(u.credits||0)+'</b></td><td class="small">'+fmtDate(u.createdAt)+'</td></tr>';}).join('')+'</tbody></table></div></div></div>'
+    :tab==='jobs'?'<div class="card"><div class="card-head"><h3>All jobs</h3></div><div class="card-body"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Title</th><th>Customer</th><th>Category</th><th>Bids</th><th>Status</th></tr></thead><tbody>'+DB.jobs.map(function(j){return '<tr><td><b>'+esc(j.title)+'</b></td><td class="small">'+esc(userName(j.customerId))+'</td><td class="small">'+esc(j.subcategory)+'</td><td>'+bidsForJob(j.id).length+'</td><td>'+statusBadge(j.status)+'</td></tr>';}).join('')+'</tbody></table></div></div></div>'
+    :'<div class="card"><div class="card-head"><h3>All transactions</h3></div><div class="card-body"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Date</th><th>User</th><th>Description</th><th>Credits</th><th>Amount</th><th>Status</th></tr></thead><tbody>'+DB.transactions.slice().sort(function(a,b){return new Date(b.createdAt)-new Date(a.createdAt);}).map(function(t){const u=getUser(t.userId);return '<tr><td class="small">'+fmtDate(t.createdAt)+'</td><td class="small">'+esc(u?u.name:'—')+'</td><td class="small">'+esc(t.description)+'</td><td><b>'+(t.credits>0?'+':'')+t.credits+'</b></td><td>'+R(t.amount)+'</td><td>'+statusBadge(t.status)+'</td></tr>';}).join('')+'</tbody></table></div></div></div>')+
+  '</div>';
+}
+
+function adminPaymentsTable(compact){
+  const pend=pendingRefs();
+  if(!pend.length)return emptyState('check','No pending payments','All payments have been verified. New references appear here automatically.','');
+  return '<div class="tbl-wrap"><table class="tbl"><thead><tr><th>Reference</th><th>User</th><th>Amount</th><th>Credits</th><th>Marked paid</th><th>Status</th><th></th></tr></thead><tbody>'+
+    pend.map(function(r){
+      const u=getUser(r.userId);
+      return '<tr>'+
+        '<td><span style="font-family:ui-monospace,Menlo,monospace;font-weight:800;font-size:12px">'+esc(r.reference)+'</span></td>'+
+        '<td><div class="flex gap10 center"><div class="avatar sm">'+esc(initials(u?u.name:'?'))+'</div><div><b class="small">'+esc(u?u.name:'—')+'</b><div class="tiny muted">'+esc(u?u.email:'')+'</div></div></div></td>'+
+        '<td><b>'+R(r.amount)+'</b></td>'+
+        '<td><b style="color:var(--gold-d)">'+r.credits+'</b></td>'+
+        '<td>'+(r.userMarkedPaid?'<span class="badge b-ok">'+icon('check',11)+' Yes</span><div class="tiny muted mt6">'+timeAgo(r.userPaidAt||r.createdAt)+'</div>':'<span class="badge b-grey">Not yet</span>')+'</td>'+
+        '<td>'+statusBadge(r.status)+'</td>'+
+        '<td><div class="flex gap6"><button class="btn btn-sm btn-primary" data-action="verify-payment" data-id="'+r.id+'">'+icon('check',13)+' Verify &amp; load</button><button class="btn btn-sm btn-outline" data-action="reject-payment" data-id="'+r.id+'">'+icon('x',13)+'</button></div></td>'+
+      '</tr>';
+    }).join('')+'</tbody></table></div>';
+}
+
+/* ============ MODALS ============ */
+function showPostJobModal(){
+  const u=S.user;
+  const html=
+    '<div class="modal-head"><div><h3>'+icon('plus',20)+' Post a new job</h3><p>Cost: '+CFG.postJobCost+' credits ('+R(CFG.postJobCost*CFG.creditValue)+')</p></div><button class="x-btn" data-action="close-modal">'+icon('x',18)+'</button></div>'+
+    '<div class="modal-body">'+
+      '<div class="alert alert-info mb18">'+icon('info',16)+'<div>Your balance: <b>'+u.credits+' credits</b>. Posting costs <b>'+CFG.postJobCost+' credits</b>. '+(u.credits<CFG.postJobCost?'<span style="color:var(--danger);font-weight:800">Insufficient — buy more credits first.</span>':'You will have '+(u.credits-CFG.postJobCost)+' left.')+'</div></div>'+
+      '<form data-form="post-job">'+
+        '<div class="field"><label>Job title <span class="req">*</span></label><input class="input" name="title" required placeholder="e.g. Burst pipe under kitchen sink"></div>'+
+        '<div class="field"><label>Description <span class="req">*</span></label><textarea class="textarea" name="description" required placeholder="Describe exactly what you need..."></textarea></div>'+
+        '<div class="row c2">'+
+          '<div class="field"><label>Category <span class="req">*</span></label><select class="select" name="category" required data-action="change-cat">'+
+            '<option value="">Select category</option>'+CAT_NAMES.map(function(c){return '<option>'+esc(c)+'</option>';}).join('')+
+          '</select></div>'+
+          '<div class="field"><label>Subcategory <span class="req">*</span></label><select class="select" name="subcategory" required id="subcat-select"><option value="">Select category first</option></select></div>'+
+        '</div>'+
+        '<div class="row c2">'+
+          '<div class="field"><label>City <span class="req">*</span></label><select class="select" name="location" required>'+CITIES.map(function(c){return '<option>'+esc(c)+'</option>';}).join('')+'</select></div>'+
+          '<div class="field"><label>Budget range <span class="req">*</span></label><input class="input" name="budget" required placeholder="e.g. R1,500 – R3,000"></div>'+
+        '</div>'+
+        '<div class="field"><label>Job tier <span class="req">*</span></label>'+
+          '<div class="grid g3" style="gap:10px">'+
+            [1,2,3].map(function(t){
+              const tier=JOB_TIERS[t];
+              return '<label style="cursor:pointer;padding:12px;border:2px solid var(--line);border-radius:var(--r-sm);text-align:center;transition:.15s" class="tier-pick" data-tier="'+t+'">'+
+                '<input type="radio" name="tier" value="'+t+'" '+(t===2?'checked':'')+' style="display:none">'+
+                '<div class="bold small">'+tier.name+'</div>'+
+                '<div class="tiny muted mt6">'+tier.min+'-'+tier.max+' credits bid</div>'+
+                '<div class="tiny muted mt6">'+esc(tier.desc)+'</div>'+
+              '</label>';
+            }).join('')+
+          '</div>'+
+        '</div>'+
+      '</form>'+
+    '</div>'+
+    '<div class="modal-foot">'+
+      '<button class="btn btn-ghost" data-action="close-modal">Cancel</button>'+
+      '<button class="btn btn-primary" data-action="submit-post-job" '+(u.credits<CFG.postJobCost?'disabled':'')+'>'+icon('check',15)+' Post job · '+CFG.postJobCost+' credits</button>'+
+    '</div>';
+  openModal(html,true);
+  /* tier pick styling */
+  setTimeout(function(){
+    $$('.tier-pick').forEach(function(el){
+      el.addEventListener('click',function(){
+        $$('.tier-pick').forEach(function(x){x.style.borderColor='var(--line)';x.style.background='var(--surface)';});
+        el.style.borderColor='var(--teal)';el.style.background='var(--teal-l)';
+        const inp=el.querySelector('input');if(inp)inp.checked=true;
+      });
+      const inp=el.querySelector('input');
+      if(inp&&inp.checked){el.style.borderColor='var(--teal)';el.style.background='var(--teal-l)';}
+    });
+    /* category change updates subcategory */
+    const catSel=$('[name="category"]');
+    if(catSel)catSel.addEventListener('change',function(){
+      const sub=$('#subcat-select');if(!sub)return;
+      const subs=CATEGORIES[catSel.value]||[];
+      sub.innerHTML='<option value="">Select subcategory</option>'+subs.map(function(s){return '<option>'+esc(s)+'</option>';}).join('');
+    });
+  },50);
+}
+
+function showJobModal(jid){
+  const j=getJob(jid);if(!j)return;
+  const u=S.user;
+  const bids=bidsForJob(jid);
+  const isCustomer=j.customerId===u.id;
+  const isBiz=u.role==='business';
+  const b=myBiz();
+  const myBid=b?bids.find(function(x){return x.businessId===b.id;}):null;
+  const cost=tierBidCost(j.tier);
+
+  let bodyHtml='';
+  if(isCustomer){
+    bodyHtml=renderJobDetails(j)+
+      '<div class="divider"></div>'+
+      '<h4 style="font-size:14px;font-weight:800;margin-bottom:12px">Bids received ('+bids.length+')</h4>'+
+      (bids.length?bids.map(function(bd){const biz=getBiz(bd.businessId);return '<div style="padding:14px;border:1px solid var(--line);border-radius:var(--r);margin-bottom:12px"><div class="flex between center wrap gap10"><div class="flex gap10 center"><div class="avatar sm">'+esc(initials(biz?biz.name:'?'))+'</div><div><b>'+esc(biz?biz.name:'Business')+'</b><div class="tiny muted">'+(biz?starRow(biz.rating,biz.reviewsCount):'')+' '+tierBadge(biz?biz.verificationLevel:0)+'</div></div></div><div class="right"><div class="bold" style="color:var(--teal-d);font-size:18px">'+R(bd.amount)+'</div><div class="tiny muted">'+bd.days+' day(s)</div></div></div><p class="small mt10" style="color:var(--muted)">'+esc(bd.message)+'</p><div class="flex gap6 mt10"><button class="btn btn-sm btn-outline" data-action="open-chat" data-job="'+j.id+'" data-other="'+(biz?biz.ownerId:'')+'">'+icon('chat',13)+' Message</button>'+(j.status==='open'?'<button class="btn btn-sm btn-primary" data-action="accept-bid" data-bid="'+bd.id+'">'+icon('check',13)+' Accept bid</button>':'')+'</div></div>';}).join(''):'<p class="small muted">No bids yet. Businesses matching your category will see this job.</p>');
+  } else if(isBiz){
+    if(!b){bodyHtml=renderJobDetails(j)+'<div class="alert alert-warn mt14">'+icon('alert',16)+'<div>Create a business profile to bid on jobs.</div></div>';}
+    else if(myBid){
+      bodyHtml=renderJobDetails(j)+'<div class="alert alert-ok mt14">'+icon('check',16)+'<div><b>You have already submitted a bid for this job.</b><br>Amount: '+R(myBid.amount)+' · Status: '+statusBadge(myBid.status)+'</div></div><button class="btn btn-outline btn-block mt14" data-action="open-chat" data-job="'+j.id+'" data-other="'+j.customerId+'">'+icon('chat',15)+' Message customer</button>';
+    } else if(j.status!=='open'){
+      bodyHtml=renderJobDetails(j)+'<div class="alert alert-warn mt14">'+icon('info',16)+'<div>This job is no longer open.</div></div>';
+    } else {
+      bodyHtml=renderJobDetails(j)+
+        '<div class="alert alert-gold mt14">'+icon('coin',16)+'<div><b>Bid cost for this job:</b> '+cost.min+'-'+cost.max+' credits ('+R(cost.min*CFG.creditValue)+'-'+R(cost.max*CFG.creditValue)+'). Your balance: <b>'+u.credits+' credits</b>.</div></div>'+
+        '<form data-form="bid"><input type="hidden" name="jobId" value="'+j.id+'">'+
+          '<div class="row c2"><div class="field"><label>Your quote (R) <span class="req">*</span></label><input class="input" type="number" name="amount" required min="1" placeholder="e.g. 2450"></div>'+
+          '<div class="field"><label>Days to complete <span class="req">*</span></label><input class="input" type="number" name="days" required min="1" value="1"></div></div>'+
+          '<div class="field"><label>Message to customer <span class="req">*</span></label><textarea class="textarea" name="message" required placeholder="Describe your approach, what is included, and any guarantees..."></textarea></div>'+
+        '</form>';
+    }
+  } else {
+    bodyHtml=renderJobDetails(j);
+  }
+
+  const footer = (isBiz&&b&&!myBid&&j.status==='open')
+    ? '<button class="btn btn-ghost" data-action="close-modal">Cancel</button><button class="btn btn-primary" data-action="submit-bid" data-cost="'+cost.min+'">'+icon('send',15)+' Submit bid · '+cost.min+' credits</button>'
+    : '<button class="btn btn-ghost" data-action="close-modal">Close</button>';
+
+  openModal(
+    '<div class="modal-head"><div><h3>'+esc(j.title)+'</h3><p>'+esc(j.subcategory)+' · '+esc(j.location)+' · '+timeAgo(j.createdAt)+'</p></div><button class="x-btn" data-action="close-modal">'+icon('x',18)+'</button></div>'+
+    '<div class="modal-body">'+bodyHtml+'</div>'+
+    '<div class="modal-foot">'+footer+'</div>', true
+  );
+}
+
+function renderJobDetails(j){
+  return '<div class="flex gap6 wrap mb14">'+statusBadge(j.status)+'<span class="badge b-navy">'+tierName(j.tier)+'</span><span class="badge b-gold">'+esc(j.budget)+'</span></div>'+
+    '<p style="line-height:1.65;color:var(--muted)">'+esc(j.description)+'</p>'+
+    '<div class="divider"></div>'+
+    '<div class="kv"><span class="k">Customer</span><span class="v">'+esc(userName(j.customerId))+'</span></div>'+
+    '<div class="kv"><span class="k">Category</span><span class="v">'+esc(j.category)+'</span></div>'+
+    '<div class="kv"><span class="k">Location</span><span class="v">'+esc(j.location)+'</span></div>'+
+    '<div class="kv"><span class="k">Budget</span><span class="v">'+esc(j.budget)+'</span></div>'+
+    '<div class="kv"><span class="k">Bids</span><span class="v">'+bidsForJob(j.id).length+'</span></div>';
+}
+
+/* ============ EVENT BINDING ============ */
+function bindGlobal(){
+  document.onclick = function(e){
+    const t=e.target.closest('[data-action]');
+    if(!t)return;
+    const a=t.getAttribute('data-action');
+    if(a==='overlay-close'){
+      if(e.target===t)closeModal();
+      return;
+    }
+    e.preventDefault();
+    handleAction(a,t,e);
+  };
+  document.onchange = function(e){
+    const t=e.target.closest('[data-filter]');
+    if(t){
+      const k=t.getAttribute('data-filter');
+      S.filters[k]=t.value;
+      render();
+    }
+  };
+  document.onsubmit = function(e){
+    const f=e.target.closest('form[data-form]');
+    if(!f)return;
+    e.preventDefault();
+    handleForm(f.getAttribute('data-form'),f);
+  };
+}
+
+function handleAction(a,t,e){
+  if(a==='go'){go(t.getAttribute('data-route'),{role:t.getAttribute('data-role'),id:t.getAttribute('data-id')});return;}
+  if(a==='go-dashboard'){go('dashboard');return;}
+  if(a==='close-modal'){closeModal();return;}
+  if(a==='logout'){S.user=null;persistSession();go('landing');toast('Signed out','info');return;}
+  if(a==='toggle-sidebar'){S.sidebarOpen=!S.sidebarOpen;$('.sidebar').classList.toggle('open');return;}
+  if(a==='signup-role'){S.signupRole=t.getAttribute('data-role');render();return;}
+  if(a==='demo-login'){$('[name="email"]').value=t.getAttribute('data-email');$('[name="password"]').value=t.getAttribute('data-pass');toast('Demo credentials filled — click Sign in','info');return;}
+  if(a==='view-business'){go('business-public',{id:t.getAttribute('data-id')});return;}
+  if(a==='view-job'){showJobModal(t.getAttribute('data-id'));return;}
+  if(a==='post-job'){showPostJobModal();return;}
+  if(a==='open-chat'){S.chatJobId=t.getAttribute('data-job');S.chatOtherId=t.getAttribute('data-other');go('messages');return;}
+  if(a==='close-chat'){S.chatJobId=null;S.chatOtherId=null;render();return;}
+  if(a==='send-msg'){
+    const inp=$('#chat-input');if(!inp||!inp.value.trim())return;
+    DB.messages.push({id:uid('m'),jobId:S.chatJobId,fromId:S.user.id,toId:S.chatOtherId,body:inp.value.trim(),createdAt:now(),read:false});
+    saveDB();render();
+    setTimeout(function(){const el=$('#chat-scroll');if(el)el.scrollTop=el.scrollHeight;const i=$('#chat-input');if(i)i.focus();},50);
+    return;
+  }
+  if(a==='generate-ref'){generatePaymentRef();return;}
+  if(a==='copy-ref'){
+    const ref=t.getAttribute('data-ref');
+    if(navigator.clipboard){navigator.clipboard.writeText(ref).then(function(){toast('Reference copied','ok');},function(){toast('Reference: '+ref,'info');});}
+    else{toast('Reference: '+ref,'info');}
+    return;
+  }
+  if(a==='mark-paid'){markRefAsPaid(t.getAttribute('data-id'));return;}
+  if(a==='verify-payment'){verifyPayment(t.getAttribute('data-id'));return;}
+  if(a==='reject-payment'){rejectPayment(t.getAttribute('data-id'));return;}
+  if(a==='admin-tab'){S.adminTab=t.getAttribute('data-tab');render();return;}
+  if(a==='submit-post-job'){submitPostJob();return;}
+  if(a==='submit-bid'){submitBid(parseInt(t.getAttribute('data-cost'),10));return;}
+  if(a==='accept-bid'){acceptBid(t.getAttribute('data-bid'));return;}
+}
+
+function handleForm(name,f){
+  if(name==='login'){
+    const email=f.email.value.trim().toLowerCase();
+    const pass=f.password.value;
+    const u=DB.users.find(function(x){return x.email.toLowerCase()===email&&x.password===pass;});
+    if(!u){toast('Invalid email or password','err');return;}
+    S.user=u;persistSession();toast('Welcome back, '+u.name.split(' ')[0],'ok');go('dashboard');return;
+  }
+  if(name==='register'){
+    const data={};
+    Array.prototype.forEach.call(f.elements,function(el){if(el.name)data[el.name]=el.value;});
+    const email=data.email.trim().toLowerCase();
+    if(DB.users.find(function(x){return x.email.toLowerCase()===email;})){toast('That email is already registered','err');return;}
+    const uid2=uid('u');
+    const newUser={id:uid2,name:data.name,email:data.email,password:data.password,role:data.role,phone:data.phone,credits:0,createdAt:now()};
+    DB.users.push(newUser);
+    if(data.role==='business'){
+      DB.businesses.push({
+        id:uid('b'),ownerId:uid2,name:data.bizName||data.name+' Business',category:data.bizCat,subcategory:'General',
+        description:'New business on Taskora.',phone:data.phone,email:data.email,website:data.bizWeb||'',
+        address:{street:data.bizAddr||'',suburb:'',city:data.bizCity,province:'',postal:''},
+        companyReg:data.bizReg||'',certs:[],proprietorCerts:[],
+        verificationLevel:data.bizReg?2:data.bizWeb?1:0,rating:0,reviewsCount:0,completedJobs:0,
+        responseMinutes:15,serviceAreas:[data.bizCity],createdAt:now(),active:true
+      });
+    }
+    saveDB();
+    S.user=newUser;persistSession();
+    toast('Account created! Welcome to Taskora','ok');
+    go('dashboard');return;
+  }
+}
+
+/* ============ CREDIT FLOW ============ */
+function generatePaymentRef(){
+  const u=S.user;
+  const ref={
+    id:uid('pr'),
+    userId:u.id,
+    reference:genPaymentRef(),
+    credits:CFG.fixedBatchCredits,
+    amount:CFG.fixedBatchPrice,
+    status:'pending',
+    createdAt:now(),
+    userMarkedPaid:false,
+    userPaidAt:null,
+    verifiedAt:null
+  };
+  DB.paymentRefs.push(ref);
+  saveDB();
+  showPaymentModal(ref);
+}
+
+function markRefAsPaid(id){
+  const ref=DB.paymentRefs.find(function(r){return r.id===id;});
+  if(!ref)return;
+  ref.userMarkedPaid=true;
+  ref.userPaidAt=now();
+  saveDB();
+  toast('Payment marked as paid. Admin will verify and load your credits shortly.','ok');
+  closeModal();
+  render();
+}
+
+function verifyPayment(id){
+  const ref=DB.paymentRefs.find(function(r){return r.id===id;});
+  if(!ref)return;
+  const u=getUser(ref.userId);
+  if(!u)return;
+  if(ref.status==='verified'){toast('Already verified','info');return;}
+  ref.status='verified';
+  ref.verifiedAt=now();
+  u.credits=(u.credits||0)+ref.credits;
+  DB.transactions.push({
+    id:uid('t'),userId:u.id,type:'credit_purchase',credits:ref.credits,amount:ref.amount,
+    description:'Credit batch · '+ref.reference,status:'verified',createdAt:now(),
+    refId:ref.id
+  });
+  saveDB();
+  toast('Verified! '+ref.credits+' credits loaded to '+u.name,'ok');
+  render();
+}
+
+function rejectPayment(id){
+  const ref=DB.paymentRefs.find(function(r){return r.id===id;});
+  if(!ref)return;
+  if(!confirm('Reject this payment reference?'))return;
+  ref.status='rejected';
+  saveDB();
+  toast('Payment rejected','info');
+  render();
+}
+
+function submitPostJob(){
+  const u=S.user;
+  const f=$('form[data-form="post-job"]');
+  if(!f)return;
+  const data={};
+  Array.prototype.forEach.call(f.elements,function(el){if(el.name)data[el.name]=el.value;});
+  if(!data.title||!data.description||!data.category||!data.subcategory||!data.location||!data.budget){
+    toast('Please fill in all required fields','err');return;
+  }
+  if(u.credits<CFG.postJobCost){toast('Insufficient credits. Buy more credits first.','err');return;}
+  u.credits-=CFG.postJobCost;
+  const newJob={
+    id:uid('j'),customerId:u.id,title:data.title,description:data.description,
+    category:data.category,subcategory:data.subcategory,location:data.location,
+    tier:parseInt(data.tier,10)||2,budget:data.budget,status:'open',
+    createdAt:now(),views:0,acceptedBidId:null,completedAt:null
+  };
+  DB.jobs.push(newJob);
+  DB.transactions.push({
+    id:uid('t'),userId:u.id,type:'job_post',credits:-CFG.postJobCost,amount:0,
+    description:'Posted job: '+newJob.title,status:'verified',createdAt:now(),jobId:newJob.id
+  });
+  saveDB();
+  toast('Job posted! '+CFG.postJobCost+' credits deducted.','ok');
+  closeModal();
+  go('my-jobs');
+}
+
+function submitBid(cost){
+  const u=S.user;
+  const b=myBiz();
+  const f=$('form[data-form="bid"]');
+  if(!f||!b)return;
+  const data={};
+  Array.prototype.forEach.call(f.elements,function(el){if(el.name)data[el.name]=el.value;});
+  if(!data.amount||!data.days||!data.message){toast('Please fill in all fields','err');return;}
+  if(u.credits<cost){toast('Insufficient credits. You need '+cost+' credits for this bid.','err');return;}
+  u.credits-=cost;
+  const newBid={
+    id:uid('bid'),jobId:data.jobId,businessId:b.id,
+    amount:parseFloat(data.amount),days:parseInt(data.days,10),
+    message:data.message,creditsSpent:cost,status:'pending',createdAt:now()
+  };
+  DB.bids.push(newBid);
+  DB.transactions.push({
+    id:uid('t'),userId:u.id,type:'bid',credits:-cost,amount:0,
+    description:'Bid submitted on job',status:'verified',createdAt:now(),bidId:newBid.id
+  });
+  /* Auto-create conversation with customer */
+  DB.messages.push({
+    id:uid('m'),jobId:data.jobId,fromId:u.id,toId:getJob(data.jobId).customerId,
+    body:'Hi, I have submitted a bid of '+R(newBid.amount)+' for your job "'+getJob(data.jobId).title+'". Please feel free to message me with any questions.',
+    createdAt:now(),read:false
+  });
+  saveDB();
+  toast('Bid submitted! '+cost+' credits deducted.','ok');
+  closeModal();
+  go('my-bids');
+}
+
+function acceptBid(bidId){
+  const bid=DB.bids.find(function(x){return x.id===bidId;});
+  if(!bid)return;
+  const job=getJob(bid.jobId);
+  if(!job)return;
+  job.acceptedBidId=bid.id;
+  job.status='in_progress';
+  DB.bids.forEach(function(x){if(x.jobId===job.id&&x.id!==bid.id)x.status='rejected';});
+  bid.status='accepted';
+  /* Auto-message both sides */
+  DB.messages.push({
+    id:uid('m'),jobId:job.id,fromId:S.user.id,toId:getBiz(bid.businessId).ownerId,
+    body:'I have accepted your bid of '+R(bid.amount)+'. Please contact me to arrange the work.',
+    createdAt:now(),read:false
+  });
+  saveDB();
+  toast('Bid accepted! The business has been notified.','ok');
+  closeModal();
+  render();
+}
+
+/* ============ BOOT ============ */
+loadDB();
+restoreSession();
+if(S.user){S.route='dashboard';}
+render();
+</script>
+</body>
+</html>
